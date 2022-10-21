@@ -1,0 +1,575 @@
+" ==================== Auto load for first time uses ====================
+if empty(glob($HOME.'/.config/nvim/autoload/plug.vim'))
+	silent !curl -fLo $HOME/.config/nvim/autoload/plug.vim --create-dirs
+				\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+
+"===================== 保证一个兼容性 ============================
+set nocompatible
+filetype on
+filetype indent on
+filetype plugin on
+filetype plugin indent on
+
+"===========配置python环境================
+let g:python3_host_prog="/bin/python3.10"
+
+
+"=========================================================
+"===================== vim自身配置 =======================
+"=========================================================
+
+
+"使得vim首先在当前目录寻找tags文件，如果没有则往上递归寻找
+set tags=tags;
+set autochdir
+
+set background=dark
+syntax enable  "开启语法高亮
+syntax on
+"共享剪切板
+set clipboard+=unnamed
+set showmatch		" Show matching brackets.
+set wildmenu	    "补全命令
+set ignorecase		" Do case insensitive matching
+set smartcase		" Do smart case matching
+set incsearch		" Incremental search
+set hidden		" Hide buffers when they are abandoned
+setlocal noswapfile " 不要生成swap文件
+set bufhidden=hide " 当buffer被丢弃的时候隐藏它
+set number " 显示行号
+set cursorline " 突出显示当前行
+set ruler " 打开状态栏标尺
+filetype indent on	" 自适应不同语言的智能缩进
+set expandtab	" 将制表符扩展为空格
+set tabstop=4	" 设置编辑时制表符占用空格数
+set shiftwidth=4	" 设置格式化时制表符占用空格数
+set softtabstop=4	" 让 vim 把连续数量的空格视为一个制表符
+set nobackup " 覆盖文件时不备份
+set autochdir " 自动切换当前目录为当前文件所在的目录
+set backupcopy=yes " 设置备份时的行为为覆盖
+set hlsearch " 搜索时高亮显示被找到的文本
+set noerrorbells " 关闭错误信息响铃
+set novisualbell " 关闭使用可视响铃代替呼叫
+set t_vb= " 置空错误铃声的终端代码
+set matchtime=2 " 短暂跳转到匹配括号的时间
+set magic " 设置魔术
+set smartindent " 开启新行时使用智能自动缩进
+set backspace=indent,eol,start " 不设定在插入状态无法用退格键和 Delete 键删除回车符
+set cmdheight=1 " 设定命令行的行数为 1
+set foldenable " 开始折叠
+set foldmethod=syntax " 设置语法折叠
+set foldcolumn=0 " 设置折叠区域的宽度
+setlocal foldlevel=9 " 设置折叠层数为 1
+"折叠  za,打开/关闭当前折叠；zM，关闭所有折叠；zR,打开所有折叠
+"让光标保持在上次光标的位置
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" ==================== Dress up my vim ====================
+set termguicolors " enable true colors support
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+silent! color deus
+
+hi NonText ctermfg=gray guifg=grey10
+"hi SpecialKey ctermfg=blue guifg=grey70
+
+
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  if (has("nvim"))
+    """For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  """For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  """Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  """ < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
+
+"=========================================================
+"====================== nvim的基本映射 ===================
+"=========================================================
+noremap J 5j
+noremap K 5k
+noremap <leader>s :w<CR> 
+let mapleader = ';'
+map s 'nop'
+map e 'nop'
+"打开终端，并取消行号显示
+nmap <leader>t  :ter <CR>:set nonu<CR>
+
+"======================= 窗口管理 =========================
+
+"hjkl分屏命令，分别是向右，左，上，下分屏
+map sh  :set nosplitright<CR>:vsplit<CR>
+map sl  :set splitright<CR>:vsplit<CR>
+map sj  :set splitbelow<CR>:split<CR>
+map sk  :set nosplitbelow<CR>:split<CR>
+"用来选分屏wasd
+map <LEADER>d <C-w>l
+map <LEADER>a <C-w>h
+map <LEADER>w <C-w>k
+map <LEADER>s <C-w>j
+
+"用来调节屏幕大小
+map <up> :res +5<CR>
+map <down> :res -5<CR>
+map <left> :vertical resize-5<CR>
+map <right> :vertical resize+5<CR>
+
+"分别是：上下变左右，左右变上下
+map sv <C-w>t<C-w>H
+map ss <C-w>t<C-w>K 
+
+"vim标签页
+map te :tabe<CR>
+map th :-tabnext<CR>
+map tl :+tabnext<CR>
+
+"打开vim时执行消除高亮命令
+noremap S :source $MYVIMRC <CR>
+exec ':noh'
+
+
+
+
+
+
+
+
+
+"================================================================
+"================ Install Plugins with vim-plug =================
+"================================================================
+call plug#begin('~/.config/nvim/plugged')
+
+"状态栏
+Plug 'vim-airline/vim-airline'
+
+"undotree
+Plug 'mbbill/undotree'
+
+"主题monokai
+Plug 'crusoexia/vim-monokai'
+
+"多光标
+"Plug 'terryma/vim-multiple-cursors'
+
+Plug 'tpope/vim-surround'
+
+"添加片段
+Plug 'SirVer/ultisnips'
+"---------------markdown相关---------------
+
+"markdown文件预览
+Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
+
+"makrdown图片粘贴
+Plug 'ferrine/md-img-paste.vim'
+
+"markdown语法高亮等
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+
+"markdown-目录
+"Plug 'mzlogin/vim-markdown-toc'
+
+"----------------代码相关------------------
+"注释
+Plug 'preservim/nerdcommenter'
+
+"显示当前文件的函数,映射mapping，变量
+"Plug 'majutsushi/tagbar'
+
+"代码智能补全……
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"使得coc支持vim补全
+Plug 'Shougo/neco-vim'
+Plug 'neoclide/coc-neco'
+
+"缩进块显示
+Plug 'Yggdroot/indentLine'
+
+"显示映射，函数，定义
+Plug 'liuchengxu/vista.vim'
+
+"文件模糊寻找  使用命令:FZF
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
+"代码格式化插件
+"Plug 'vim-autoformat/vim-autoformat'
+
+call plug#end()
+
+
+
+
+
+
+"================================================================
+"=======================插件配置=================================
+"================================================================
+
+"=======================关于monolai插件的一些配置=======================
+colorscheme monokai
+
+
+"==============<关于instantmarkdown插件的一些配置>==============
+
+let g:instant_markdown_autostart = 0  "开启手动启动预览窗口
+noremap <C-s> :InstantMarkdownPreview<CR>
+noremap <C-e> :InstantMarkdownStop<CR>
+
+
+"=====================<关于nerdcommenter插件的一些配置>=====================
+"注释插件
+
+filetype plugin on 
+"一些mapping：
+" <leader>ci 注释/取消注释
+" <leader>cc 注释
+
+
+"===========================<关于vista插件的一些配置>===================
+
+
+"用于开关vista窗口，在相应变量，映射，函数处，按enter,即可跳转到所在位置
+nmap <F4> :Vista!!<CR>
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+
+" Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
+let g:vista#renderer#enable_icon = 1
+
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+
+
+"======================<关于coc插件的一些配置>===============
+
+"当变量中包含的扩展名没有被安装的时候，安装那些扩展“
+let g:coc_global_extensions = [
+		\ 'coc-clangd',]
+
+set nobackup
+set nowritebackup
+set signcolumn=yes
+"设置coc的使用的node所在目录
+let g:coc_node_path = "/home/awjl/.nvm/versions/node/v16.17.1/bin/node" 
+
+"----------------tab cofig -------------------------
+"使用tab来选择代码不全的选择
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+inoremap <silent><expr> <Tab>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+"tab向下选择，shift+tab向上选择
+inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
+
+"------tab config end-----
+
+"Make <CR> to accept selected completion item or notify coc.nvim to format
+"<C-g>u breaks current undo, please make your own choice.
+"使用enter来选择提供的第一个补全
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+"使用[g，]g来跳转到下/上个报错的地方
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+"显示所有诊断
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+
+"跳转到函数,变量定义处
+nmap <silent> gd <Plug>(coc-definition)  
+"在新窗口中打开函数，变量定义
+nmap <silent> gD :tab sp<CR><Plug>(coc-definition)
+"显示所有当前文件中使用光标所在处函数的位置,可跳转
+nmap <silent> gr <Plug>(coc-references)
+
+"重命名变量，该变量所在的所有行的名字都会更改
+nmap <leader>rn <Plug>(coc-rename)
+
+"格式化代码，使代码符合书写规范
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  "自动识别文件类型 
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+   "Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Use <leader>p to show documentation in preview window
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+nnoremap <silent> <leader>p :call <SID>show_documentation()<CR>
+
+
+
+
+"----------------一些映射---------------
+"插件管理
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+"显示所有coc命令 
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+"在当前文件中寻找symbol
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+"寻找整个工作目录中某个变量，函数…… 
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+
+
+
+"======================关于coc-explorer插件的一些配置=======================
+
+"文件浏览的一些预设目录
+let g:coc_explorer_global_presets = {
+\   'init.vim': {
+\     'root-uri': '~/.config/nvim',
+\   },
+\   'cocConfig': {
+\      'root-uri': '~/.config/coc',
+\   },
+\   'tab': {
+\     'position': 'tab',
+\     'quit-on-open': v:true,
+\   },
+\   'tab:$': {
+\     'position': 'tab:$',
+\     'quit-on-open': v:true,
+\   },
+\   'floating': {
+\     'position': 'floating',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingTop': {
+\     'position': 'floating',
+\     'floating-position': 'center-top',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingLeftside': {
+\     'position': 'floating',
+\     'floating-position': 'left-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingRightside': {
+\     'position': 'floating',
+\     'floating-position': 'right-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'simplify': {
+\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+\   },
+\   'buffer': {
+\     'sources': [{'name': 'buffer', 'expand': v:true}]
+\   },
+\ }
+"打开当前所在目录
+nmap <leader>e :CocCommand explorer<CR>
+"Use preset argument to open it
+nmap <space>ed <Cmd>CocCommand explorer --preset init.vim<CR>
+"浮动窗口
+nmap <space>ef <Cmd>CocCommand explorer --preset floating<CR>
+"打开coc配置文件所在目录
+nmap <space>ec <Cmd>CocCommand explorer --preset cocConfig<CR>
+"打开init.vim所在目录
+nmap <space>eb <Cmd>CocCommand explorer --preset buffer<CR>
+
+"List all presets
+nmap <space>el <Cmd>CocList explPresets<CR>
+
+
+
+"=======================关于indentLine插件的一些配置=======================
+"打开/关闭IndentLine
+map <space>i :IndentLinesToggle<CR>
+
+
+"=======================关于vim-markdown插件的一些配置=======================
+"[[ "跳转上一个标题
+"]] "跳转下一个标题
+"]c "跳转到当前标题
+"]u "跳转到副标题
+"zr "打开下一级折叠
+"zR "打开所有折叠
+"zm "折叠当前段落
+"zM "折叠所有段落
+":Toc "显示目录
+
+"警用markdown语法隐藏
+let g:vim_markdown_conceal = 0
+let g:tex_conceal = ""
+let g:vim_markdown_math = 1
+let g:vim_markdown_conceal_code_blocks = 0
+
+"将缩进格式设置成2
+"let g:vim_markdown_new_list_item_indent = 2
+"高亮数学公式
+let g:vim_markdown_math = 1 
+
+
+"=======================关于vim-markdown-toc插件的一些配置=======================
+"在当前光标后生成目录
+map <leader>z :GenTocMarked<CR>
+"更新目录
+map <leader>x :UpdateToc
+"取消储存时自动更新目录
+let g:vmt_auto_update_on_save = 0
+
+"避免生成太多层级的目录
+function RToc()
+    exe "/-toc .* -->"
+    let lstart=line('.')
+    exe "/-toc -->"
+    let lnum=line('.')
+    execute lstart.",".lnum."g/           /d"
+endfunction
+
+"=======================关于vim-ultisnips插件的一些配置=======================
+"
+"设置tab键为触发键
+let g:UltiSnipsExpandTrigger = '<C-tab>' 
+"设置向后跳转键
+"let g:UltiSnipsJumpForwardTrigger = '<tab>' 
+"设置向前跳转键
+"let g:UltiSnipsJumpBackwardTrigger = '<S-tab>' 
+"设置文件目录
+"let g:UltiSnipsSnippetDirectories=[""]
+"设置打开配置文件时为垂直打开
+"let g:UltiSnipsEditSplit="vertical"
+
+
+
+
+
+
+"=======================关于fzf插件的一些配置=======================
+"在新窗口，垂直分屏，水平分屏处打开文件
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',   
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" Default fzf layout
+" - Popup window (center of the current window)
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'relative': v:true } }
+
+" Customize fzf colors to match your color scheme
+" - fzf#wrap translates this to a set of `--color` options
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+" Enable per-command history
+" - History files will be stored in the specified directory
+" - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
+"   'previous-history' instead of 'down' and 'up'.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+"映射c-f来寻找文件
+nmap <C-f>  :FZF<CR>
+
+"映射f来寻找制定目录的文件
+
+
+"=======================关于undotree插件的一些配置=======================
+nnoremap <F5> :UndotreeToggle<CR>
+
+"将撤销文件存储在一个单独的位置
+if has("persistent_undo")
+   let target_path = expand('~/.undodir')
+
+    " create the directory and any parent directories
+    " if the location does not exist.
+    if !isdirectory(target_path)
+        call mkdir(target_path, "p", 0700)
+    endif
+
+    let &undodir=target_path
+    set undofile
+endif
+
+
+"=======================关于multi_cursor插件的一些配置=======================
+"let g:multi_cursor_use_default_mapping=0
+"" Default mapping
+"let g:multi_cursor_start_word_key      = '<C-n>'
+"let g:multi_cursor_select_all_word_key = '<A-n>'
+"let g:multi_cursor_start_key           = 'g<C-n>'
+"let g:multi_cursor_select_all_key      = 'g<A-n>'
+"let g:multi_cursor_next_key            = '<C-n>'
+"let g:multi_cursor_prev_key            = '<C-p>'
+"let g:multi_cursor_skip_key            = '<C-x>'
+"let g:multi_cursor_quit_key            = '<Esc>'
+
+
+
+"=======================关于vim-surround插件的一些配置=======================
+"介绍：
+"例子： cs'"  表示将‘换成“
+
+
+"======================关于md-img-paste插件的一些配置=======================
+autocmd FileType markdown nmap <buffer><silent> <space>p :call mdip#MarkdownClipboardImage()<CR>
+" there are some defaults for image directory and image name, you can change them
+" let g:mdip_imgdir = '.'
+" let g:mdip_imgname = 'image'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
