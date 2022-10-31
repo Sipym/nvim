@@ -149,6 +149,9 @@ exec ':noh'
 "================================================================
 call plug#begin('~/.config/nvim/plugged')
 
+"显示映射，函数，定义,显示markdown目录。good
+Plug 'liuchengxu/vista.vim'
+
 "状态栏
 Plug 'vim-airline/vim-airline'
 
@@ -180,7 +183,14 @@ Plug 'plasticboy/vim-markdown'
 "markdown-目录
 "Plug 'mzlogin/vim-markdown-toc'
 
+"---------------verilog-----------------
+"还没深入了解该插件
+"Plug 'HonkW93/automatic-verilog'
+
 "----------------代码相关------------------
+"括号
+Plug 'luochen1990/rainbow'
+
 "注释
 Plug 'preservim/nerdcommenter'
 
@@ -196,14 +206,10 @@ Plug 'neoclide/coc-neco'
 "缩进块显示
 Plug 'Yggdroot/indentLine'
 
-"显示映射，函数，定义
-Plug 'liuchengxu/vista.vim'
 
 "文件模糊寻找  使用命令:FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
-"代码格式化插件
-"Plug 'vim-autoformat/vim-autoformat'
 
 call plug#end()
 
@@ -543,7 +549,8 @@ endif
 "=======================关于vim-surround插件的一些配置=======================
 "介绍：
 "例子： cs'"  表示将‘换成“
-
+"例子： ysiw" 光标在一个单词上时，表示在该单词周围添加一个双引号
+"例子： yss)  表示在整行添加一个括号
 
 "======================关于md-img-paste插件的一些配置=======================
 autocmd FileType markdown nmap <buffer><silent> <space>p :call mdip#MarkdownClipboardImage()<CR>
@@ -552,8 +559,8 @@ autocmd FileType markdown nmap <buffer><silent> <space>p :call mdip#MarkdownClip
 " let g:mdip_imgname = 'image'
 
 
-
-
+"======================关于rainbow插件的一些配置=======================
+let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
 
 
