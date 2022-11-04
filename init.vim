@@ -39,7 +39,8 @@ set incsearch		" Incremental search
 set hidden		" Hide buffers when they are abandoned
 setlocal noswapfile " 不要生成swap文件
 set bufhidden=hide " 当buffer被丢弃的时候隐藏它
-set number " 显示行号
+"set rnu         "显示相对行数
+set nu
 set cursorline " 突出显示当前行
 set ruler " 打开状态栏标尺
 filetype indent on	" 自适应不同语言的智能缩进
@@ -152,6 +153,9 @@ call plug#begin('~/.config/nvim/plugged')
 "显示映射，函数，定义,显示markdown目录。good
 Plug 'liuchengxu/vista.vim'
 
+"允许<tab>能够满足所有的插件的插入完成需求，避免了插件间的冲突
+"通过设置不同插件实际上使用不同的按键，然后让这些按键功能可以通过tab来实现
+"Plug 'ervandew/supertab'
 "状态栏
 Plug 'vim-airline/vim-airline'
 
@@ -167,7 +171,8 @@ Plug 'crusoexia/vim-monokai'
 Plug 'tpope/vim-surround'
 
 "添加片段
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
+"Plug 'honza/vim-snippets'
 "---------------markdown相关---------------
 
 "markdown文件预览
@@ -180,12 +185,6 @@ Plug 'ferrine/md-img-paste.vim'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
-"markdown-目录
-"Plug 'mzlogin/vim-markdown-toc'
-
-"---------------verilog-----------------
-"还没深入了解该插件
-"Plug 'HonkW93/automatic-verilog'
 
 "----------------代码相关------------------
 "括号
@@ -427,49 +426,48 @@ map <space>i :IndentLinesToggle<CR>
 "zM "折叠所有段落
 ":Toc "显示目录
 
-"警用markdown语法隐藏
+"禁用markdown语法隐藏
 let g:vim_markdown_conceal = 0
 let g:tex_conceal = ""
 let g:vim_markdown_math = 1
 let g:vim_markdown_conceal_code_blocks = 0
 
-"将缩进格式设置成2
-"let g:vim_markdown_new_list_item_indent = 2
 "高亮数学公式
 let g:vim_markdown_math = 1 
 
 
-"=======================关于vim-markdown-toc插件的一些配置=======================
-"在当前光标后生成目录
-map <leader>z :GenTocMarked<CR>
-"更新目录
-map <leader>x :UpdateToc
-"取消储存时自动更新目录
-let g:vmt_auto_update_on_save = 0
+""=======================关于vim-markdown-toc插件的一些配置=======================
+""在当前光标后生成目录
+"map <leader>z :GenTocMarked<CR>
+""更新目录
+"map <leader>x :UpdateToc
+""取消储存时自动更新目录
+"let g:vmt_auto_update_on_save = 0
 
-"避免生成太多层级的目录
-function RToc()
-    exe "/-toc .* -->"
-    let lstart=line('.')
-    exe "/-toc -->"
-    let lnum=line('.')
-    execute lstart.",".lnum."g/           /d"
-endfunction
+""避免生成太多层级的目录
+"function RToc()
+    "exe "/-toc .* -->"
+    "let lstart=line('.')
+    "exe "/-toc -->"
+    "let lnum=line('.')
+    "execute lstart.",".lnum."g/           /d"
+"endfunction
 
 "=======================关于vim-ultisnips插件的一些配置=======================
 "
 "设置tab键为触发键
-let g:UltiSnipsExpandTrigger = '<C-tab>' 
+"let g:UltiSnipsExpandTrigger = '<C-tab>' 
 "设置向后跳转键
-"let g:UltiSnipsJumpForwardTrigger = '<tab>' 
+"let g:UltiSnipsJumpForwardTrigger = '<C-n>' 
 "设置向前跳转键
-"let g:UltiSnipsJumpBackwardTrigger = '<S-tab>' 
+"let g:UltiSnipsJumpBackwardTrigger = '<C-z>' 
 "设置文件目录
-"let g:UltiSnipsSnippetDirectories=[""]
+"
 "设置打开配置文件时为垂直打开
 "let g:UltiSnipsEditSplit="vertical"
 
-
+"supertab的一个配置，将c-n功能用tab实现
+"let g:SuperTabDefaultCompletionType = '<tab>'
 
 
 
@@ -545,12 +543,12 @@ endif
 "let g:multi_cursor_quit_key            = '<Esc>'
 
 
-
 "=======================关于vim-surround插件的一些配置=======================
 "介绍：
 "例子： cs'"  表示将‘换成“
-"例子： ysiw" 光标在一个单词上时，表示在该单词周围添加一个双引号
-"例子： yss)  表示在整行添加一个括号
+"例子： ysiw" 或 ys1w" 光标在一个单词上时，表示在该单词周围添加一个双引号
+"即可以用ys+一些常用操作来选择范围，最后加上要添加的符号
+"    如： ys$)   表示为从当前到行尾的部分添加上括号
 
 "======================关于md-img-paste插件的一些配置=======================
 autocmd FileType markdown nmap <buffer><silent> <space>p :call mdip#MarkdownClipboardImage()<CR>
@@ -561,8 +559,6 @@ autocmd FileType markdown nmap <buffer><silent> <space>p :call mdip#MarkdownClip
 
 "======================关于rainbow插件的一些配置=======================
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
-
-
 
 
 
