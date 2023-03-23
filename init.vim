@@ -25,12 +25,12 @@ let g:python3_host_prog="/bin/python3.10"
 "使得vim首先在当前目录寻找tags文件，如果没有则往上递归寻找
 set tags=tags;
 set autochdir
-
 set background=dark
 syntax enable  "开启语法高亮
 syntax on
-"共享剪切板
-set clipboard+=unnamed
+"共享剪切板,相互之间都共享
+set clipboard+=unnamedplus
+
 set showmatch		" Show matching brackets.
 set wildmenu	    "补全命令
 set ignorecase		" Do case insensitive matching
@@ -39,7 +39,7 @@ set incsearch		" Incremental search
 set hidden		" Hide buffers when they are abandoned
 setlocal noswapfile " 不要生成swap文件
 set bufhidden=hide " 当buffer被丢弃的时候隐藏它
-"set rnu         "显示相对行数
+set rnu         "显示相对行数
 set nu
 set cursorline " 突出显示当前行
 set ruler " 打开状态栏标尺
@@ -69,39 +69,41 @@ setlocal foldlevel=9 " 设置折叠层数为 1
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 
 " ==================== Dress up my vim ====================
-set termguicolors " enable true colors support
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-silent! color deus
+"set termguicolors " enable true colors support
+"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+"silent! color deus
 
-hi NonText ctermfg=gray guifg=grey10
-"hi SpecialKey ctermfg=blue guifg=grey70
+"hi NonText ctermfg=gray guifg=grey10
+""hi SpecialKey ctermfg=blue guifg=grey70
 
 
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-if (empty($TMUX))
-  if (has("nvim"))
-    """For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  """For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  """Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  """ < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  if (has("termguicolors"))
-    set termguicolors
-  endif
-endif
+""Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+""If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+""(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+"if (empty($TMUX))
+  "if (has("nvim"))
+    """"For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  "endif
+  """"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  """"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  """" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  "if (has("termguicolors"))
+    "set termguicolors
+  "endif
+"endif
 
 "=========================================================
 "====================== nvim的基本映射 ===================
 "=========================================================
 noremap J 5j
 noremap K 5k
-noremap <leader>s :w<CR> 
+
+"保存内容
+noremap <leader>s :w<CR>  
 let mapleader = ';'
 map s 'nop'
-map e 'nop'
+" map e 'nop'
 "打开终端，并取消行号显示
 nmap <leader>t  :ter <CR>:set nonu<CR>
 
@@ -112,11 +114,16 @@ map sh  :set nosplitright<CR>:vsplit<CR>
 map sl  :set splitright<CR>:vsplit<CR>
 map sj  :set splitbelow<CR>:split<CR>
 map sk  :set nosplitbelow<CR>:split<CR>
+
 "用来选分屏wasd
 map <LEADER>d <C-w>l
 map <LEADER>a <C-w>h
 map <LEADER>w <C-w>k
 map <LEADER>s <C-w>j
+
+"交换窗口顺序 大写R或X则是相反的交换顺序
+"向右交换窗口  <C-w-r>
+"向下交换窗口  <C-w-x>
 
 "用来调节屏幕大小
 map <up> :res +5<CR>
@@ -142,49 +149,62 @@ exec ':noh'
 
 
 
-
-
-
 "================================================================
 "================ Install Plugins with vim-plug =================
+"=========================== 安装插件 ===========================
 "================================================================
-call plug#begin('~/.config/nvim/plugged')
 
+call plug#begin('~/.config/nvim/plugged')
 "显示映射，函数，定义,显示markdown目录。good
 Plug 'liuchengxu/vista.vim'
 
 "允许<tab>能够满足所有的插件的插入完成需求，避免了插件间的冲突
 "通过设置不同插件实际上使用不同的按键，然后让这些按键功能可以通过tab来实现
 "Plug 'ervandew/supertab'
+
 "状态栏
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+"" tmux的状态栏
+Plug 'edkolev/tmuxline.vim'
 
 "undotree
 Plug 'mbbill/undotree'
 
+"ranger
+Plug 'francoiscabrol/ranger.vim'
+
 "主题monokai
 Plug 'crusoexia/vim-monokai'
 
-"多光标
+"主题与代码高亮等 everforest
+Plug 'sainnhe/everforest'
+
+"多光标(没有用到)
 "Plug 'terryma/vim-multiple-cursors'
 
+"不记得啦(到时候在github上查一下)
 Plug 'tpope/vim-surround'
 
 "添加片段
 "Plug 'SirVer/ultisnips'
 "Plug 'honza/vim-snippets'
+
+
 "---------------markdown相关---------------
 
 "markdown文件预览
 Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
 
-"makrdown图片粘贴
+"图片图片makrdown图片粘贴
 Plug 'ferrine/md-img-paste.vim'
 
 "markdown语法高亮等
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
+"生成目录
+Plug 'mzlogin/vim-markdown-toc'
 
 "----------------代码相关------------------
 "括号
@@ -192,6 +212,9 @@ Plug 'luochen1990/rainbow'
 
 "注释
 Plug 'preservim/nerdcommenter'
+
+"代码高亮
+"Plug 'octol/vim-cpp-enhanced-highlight'
 
 "显示当前文件的函数,映射mapping，变量
 "Plug 'majutsushi/tagbar'
@@ -222,7 +245,7 @@ call plug#end()
 "================================================================
 
 "=======================关于monolai插件的一些配置=======================
-colorscheme monokai
+"colorscheme monokai
 
 
 "==============<关于instantmarkdown插件的一些配置>==============
@@ -230,6 +253,30 @@ colorscheme monokai
 let g:instant_markdown_autostart = 0  "开启手动启动预览窗口
 noremap <C-s> :InstantMarkdownPreview<CR>
 noremap <C-e> :InstantMarkdownStop<CR>
+
+
+"==============<关于everforest插件的一些配置>==============
+" Important!!
+if has('termguicolors')
+    set termguicolors
+endif
+" For dark version.
+set background=dark
+" For light version.
+"set background=light
+
+" Set contrast.
+" This configuration option should be placed before `colorscheme everforest`.
+" Available values: 'hard', 'medium'(default), 'soft'
+let g:everforest_background = 'hard'
+" For better performance
+let g:everforest_better_performance = 1
+colorscheme everforest
+
+
+"==============<关于tmuxline插件的一些配置>==============
+let g:airline#extensions#tmuxline#enabled = 0
+let g:tmuxline_theme = 'jellybeans'
 
 
 "=====================<关于nerdcommenter插件的一些配置>=====================
@@ -355,8 +402,11 @@ let g:coc_explorer_global_presets = {
 \   'init.vim': {
 \     'root-uri': '~/.config/nvim',
 \   },
-\   'cocConfig': {
-\      'root-uri': '~/.config/coc',
+\   'notes': {
+\     'root-uri': '~/notes/',
+\   },
+\   'workspace': {
+\     'root-uri': '~/workspace/',
 \   },
 \   'tab': {
 \     'position': 'tab',
@@ -396,16 +446,17 @@ let g:coc_explorer_global_presets = {
 \ }
 "打开当前所在目录
 nmap <leader>e :CocCommand explorer<CR>
-"Use preset argument to open it
-nmap <space>ed <Cmd>CocCommand explorer --preset init.vim<CR>
+"打开nvim配置目录
+nmap <space>ei <Cmd>CocCommand explorer --preset init.vim<CR>
 "浮动窗口
 nmap <space>ef <Cmd>CocCommand explorer --preset floating<CR>
-"打开coc配置文件所在目录
-nmap <space>ec <Cmd>CocCommand explorer --preset cocConfig<CR>
-"打开init.vim所在目录
+"查看buffer（个人理解就是当前vim打开的所有文件）
 nmap <space>eb <Cmd>CocCommand explorer --preset buffer<CR>
 
-"List all presets
+nmap <space>en <Cmd>CocCommand explorer --preset notes<CR>
+nmap <space>ew <Cmd>CocCommand explorer --preset workspace<CR>
+
+"显示所有的preset
 nmap <space>el <Cmd>CocList explPresets<CR>
 
 
@@ -546,30 +597,31 @@ endif
 "=======================关于vim-surround插件的一些配置=======================
 "介绍：
 "例子： cs'"  表示将‘换成“
-"例子： ysiw" 或 ys1w" 光标在一个单词上时，表示在该单词周围添加一个双引号
+"例子： ysiw"  表示 ys  in word  光标在一个单词上时，表示在该单词周围添加一个双引号
 "即可以用ys+一些常用操作来选择范围，最后加上要添加的符号
 "    如： ys$)   表示为从当前到行尾的部分添加上括号
+
+
 
 "======================关于md-img-paste插件的一些配置=======================
 autocmd FileType markdown nmap <buffer><silent> <space>p :call mdip#MarkdownClipboardImage()<CR>
 " there are some defaults for image directory and image name, you can change them
 " let g:mdip_imgdir = '.'
 " let g:mdip_imgname = 'image'
-
+"autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
 
 "======================关于rainbow插件的一些配置=======================
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 
+"======================关于ranger插件的一些配置=======================
+let g:ranger_map_keys = 0
+map <leader>r :Ranger<CR>
 
 
+"======================关于vim-markdown-toc插件的一些配置=======================
+nmap <leader>i :GenTocGFM<CR>
 
-
-
-
-
-
-
-
+let g:vmt_cycle_list_item_markers = 1
 
 
 
