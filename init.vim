@@ -183,12 +183,13 @@ Plug 'sainnhe/everforest'
 "多光标(没有用到)
 "Plug 'terryma/vim-multiple-cursors'
 
-"不记得啦(到时候在github上查一下)
+"用于在某一段字符周围加或更改字符，如在`aaa`周围加一个括号;  使用ys，cs
 Plug 'tpope/vim-surround'
 
 "添加片段
-"Plug 'SirVer/ultisnips'
-"Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
 
 
 "---------------markdown相关---------------
@@ -243,6 +244,7 @@ call plug#end()
 "================================================================
 "=======================插件配置=================================
 "================================================================
+"
 
 "=======================关于monolai插件的一些配置=======================
 "colorscheme monokai
@@ -304,7 +306,7 @@ let g:vista#renderer#icons = {
 \  }
 
 
-"======================<关于coc插件的一些配置>===============
+"======================<关于coc插件的一些配置>===================
 
 "当变量中包含的扩展名没有被安装的时候，安装那些扩展“
 let g:coc_global_extensions = [
@@ -444,8 +446,11 @@ let g:coc_explorer_global_presets = {
 \     'sources': [{'name': 'buffer', 'expand': v:true}]
 \   },
 \ }
+
 "打开当前所在目录
-nmap <leader>e :CocCommand explorer<CR>
+"--reveal-when-open选项是打开explorer时，将目录展开导当前文件目录下,
+"也可通过在explorer下输入gs跳转到当前文件所在目录并展开  
+nmap <leader>e :CocCommand explorer --reveal-when-open <CR>
 "打开nvim配置目录
 nmap <space>ei <Cmd>CocCommand explorer --preset init.vim<CR>
 "浮动窗口
@@ -610,18 +615,42 @@ autocmd FileType markdown nmap <buffer><silent> <space>p :call mdip#MarkdownClip
 " let g:mdip_imgname = 'image'
 "autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
 
+
+
+
+
 "======================关于rainbow插件的一些配置=======================
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+
+
+
 
 "======================关于ranger插件的一些配置=======================
 let g:ranger_map_keys = 0
 map <leader>r :Ranger<CR>
 
 
+
+
+
 "======================关于vim-markdown-toc插件的一些配置=======================
 nmap <leader>i :GenTocGFM<CR>
 
 let g:vmt_cycle_list_item_markers = 1
+
+
+
+
+"======================关于ultisnips插件的一些配置=======================
+let g:UltiSnipsExpandTrigger="<c-t>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+
+
+
+
+
 
 
 
