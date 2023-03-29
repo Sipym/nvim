@@ -1,0 +1,192 @@
+# 我自定义了一些我暂时用到的语法的格式要求
+Language: Cpp
+BasedOnStyle: LLVM
+
+#缩进
+IndentWidth: 4 
+
+# 访问说明符(public、private等)的偏移
+# AccessModifierOffset: -4   # 暂时没用到
+
+
+#===============================================
+#=============== 对齐相关 ======================
+#===============================================
+
+# 在对结构数组使用初始化时，将字段对齐为列
+## 右对齐，每一列的元素
+AlignArrayOfStructures: Right
+
+# **连续赋值语句**的对齐风格
+AlignConsecutiveAssignments: 
+    Enabled: true           # 使能该功能
+    AcrossEmptyLines: true  # 跨越空行
+    AcrossComments: false   # 不跨越注释
+    AlignCompound: true     # 是否对齐复合赋值语句
+
+# **对齐连续声明**(如变量名)的样式
+AlignConsecutiveDeclarations: 
+    Enabled: true
+    AcrossEmptyLines: true
+    AcrossComments: false
+
+# 在转义换行中 关于对齐**反斜杠**的选项
+AlignEscapedNewlines: Left # 对齐反斜杠时尽可能左对齐
+
+
+#===============================================
+#============== 短块的处理相关 =================
+#===============================================
+
+# 允许短的块放在同一行，如while (true) {}
+## 只允许空的块
+AllowShortBlocksOnASingleLine: Empty
+
+
+# 允许短的case标签位于同一行
+## 如case1: x = 1; break;
+AllowShortCaseLabelsOnASingleLine: true
+
+# 允许短的枚举位于同一行
+AllowShortEnumsOnASingleLine: true
+
+# 允许短的函数位于同一行
+## 只允许定义在class中的函数或空行数
+AllowShortFunctionsOnASingleLine: Inline
+
+# 允许短的if语句位于同一行中
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+
+# 允许短的循环语句位于同一行中
+AllowShortLoopsOnASingleLine: true
+
+
+#===============================================
+#============== 关于换行问题 =================
+#===============================================
+
+# 函数声明返回类型后是否换行(None 自动，All全部，TopLevel...)
+AlwaysBreakAfterReturnType: None
+
+# 总是在多行字符串前换行
+AlwaysBreakBeforeMultilineStrings: false
+
+# 函数调用参数是否要在同一行
+## false: 要么都在一行，要么各自都成一行
+## true: 都行
+BinPackArguments: true
+
+# 函数声明参数是否在同一行
+## false: 要么在同一行，要么各自成一行
+BinPackParameters: true
+
+# 大括号换行规则: custome自定义
+BreakBeforeBraces: Custom
+# 大括号后是否换行,只有BreakBeforeBraces设置为Custom时才有效
+BraceWrapping:
+  # case后面
+  AfterCaseLabel: false
+  # 控制语句后面( if/for/while/switch/..)
+  AfterControlStatement: Never
+  # enum定义后面
+  AfterEnum: false
+  # 函数定义后面
+  AfterFunction: false
+  # struct定义后面
+  AfterStruct: false
+  # union定义后面
+  AfterUnion: false
+  # else之前
+  BeforeElse: false
+  # 缩进大括号(整个大括号框起来的部分都缩进)
+  IndentBraces: false
+  # 空函数的大括号是否可以在一行
+  SplitEmptyFunction: false
+
+# 在二元操作符前是否换行
+## None(在操作符后换行), NonAssignment(在非赋值的操作符前换行), All(在操作符前换行)
+BreakBeforeBinaryOperators: None
+
+# 在三元操作符前是否换行(即?:是在尾部还是头部)
+BreakBeforeTernaryOperators: true # 头部
+
+# =======================================
+
+
+# 列文字限制
+## 列限制为0表示没有列限制。在这种情况下，clang-format 将尊重输入在语句中的换行决定，除非它们与其他规则相矛盾。
+ColumnLimit: 90
+
+# 行延续的换行缩进宽度
+ContinuationIndentWidth: 4
+
+# 继承最常用的指针和引用的对齐方式
+DerivePointerAlignment: false
+ 
+# 关闭格式化
+DisableFormat: false
+ 
+# 自动检测函数的调用和定义是否被格式为每行一个参数(Experimental)
+ExperimentalAutoDetectBinPacking: false
+
+# 缩进case标签
+IndentCaseLabels: true
+
+# 要处理的预处理器指令缩进样式
+IndentPPDirectives: BeforeHash
+
+# 返回类型换行时,是否缩进函数声明或函数定义的函数名
+IndentWrappedFunctionNames: true
+
+# 保留在块开始处的空行
+KeepEmptyLinesAtTheStartOfBlocks: true
+
+# 连续空行的最大数量
+MaxEmptyLinesToKeep: 5
+
+# 用于预处理器命令的缩进宽度
+PPIndentWidth: 2
+
+# 如果为真，在c的格式转换后插入空格
+SpaceAfterCStyleCast: false
+
+# 是否在逻辑非后插入空格
+SpaceAfterLogicalNot: false
+
+# 确保指针修饰符前有空格
+SpaceAroundPointerQualifiers: Before
+
+# case的冒号前是否与空格
+SpaceBeforeCaseColon: false
+
+# 在哪种情况下在开括号()前加空格
+SpaceBeforeParens: Custom #自定义
+
+SpaceBeforeParensOptions:
+    # 在控制语句与开括号之间
+    AfterControlStatements: true
+    # 在函数**定义**名称与开括号之间
+    AfterFunctionDefinitionName: true
+    # 只有当括号不为空时，才在开括号前加空格
+    BeforeNonEmptyParentheses: true
+
+# 是否在[之前加空格。Lambdas不会受到影响。只有第一个[会被添加一个空格
+SpaceBeforeSquareBrackets: false
+
+# 是否在空块中加空格
+SpaceInEmptyBlock: false
+
+# 尾注释符前的空格数 
+SpacesBeforeTrailingComments: 4
+
+# 是否在c格式转换周围插入空格
+SpacesInCStyleCastParentheses: false
+
+# 是否在if/for/switch/while语句的条件周围加空格
+SpacesInConditionalStatement: false
+
+# Tab的宽度
+TabWidth: 4
+
+
+
