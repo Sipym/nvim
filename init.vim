@@ -65,33 +65,9 @@ set foldmethod=syntax " 设置语法折叠
 set foldcolumn=0 " 设置折叠区域的宽度
 setlocal foldlevel=9 " 设置折叠层数为 1
 "折叠  za,打开/关闭当前折叠；zM，关闭所有折叠；zR,打开所有折叠
+
 "让光标保持在上次光标的位置
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
-" ==================== Dress up my vim ====================
-"set termguicolors " enable true colors support
-"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-"silent! color deus
-
-"hi NonText ctermfg=gray guifg=grey10
-""hi SpecialKey ctermfg=blue guifg=grey70
-
-
-""Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-""If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-""(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-"if (empty($TMUX))
-  "if (has("nvim"))
-    """"For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  "endif
-  """"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  """"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  """" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  "if (has("termguicolors"))
-    "set termguicolors
-  "endif
-"endif
 
 "=========================================================
 "====================== nvim的基本映射 ===================
@@ -508,23 +484,6 @@ let g:vim_markdown_math = 1
     "let lnum=line('.')
     "execute lstart.",".lnum."g/           /d"
 "endfunction
-
-"=======================关于vim-ultisnips插件的一些配置=======================
-"
-"设置tab键为触发键
-"let g:UltiSnipsExpandTrigger = '<C-tab>' 
-"设置向后跳转键
-"let g:UltiSnipsJumpForwardTrigger = '<C-n>' 
-"设置向前跳转键
-"let g:UltiSnipsJumpBackwardTrigger = '<C-z>' 
-"设置文件目录
-"
-"设置打开配置文件时为垂直打开
-"let g:UltiSnipsEditSplit="vertical"
-
-"supertab的一个配置，将c-n功能用tab实现
-"let g:SuperTabDefaultCompletionType = '<tab>'
-
 
 
 
