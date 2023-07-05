@@ -1,0 +1,9 @@
+# 忽略任何目录下名为build,obj_dir,ysyx的文件夹
+autoload/
+myultisnips/
+plugged/
+# 忽略所有的.d,.o文件
+
+*.[do]
+
+

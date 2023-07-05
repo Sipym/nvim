@@ -56,12 +56,14 @@ set noerrorbells " 关闭错误信息响铃
 set novisualbell " 关闭使用可视响铃代替呼叫
 set t_vb= " 置空错误铃声的终端代码
 set matchtime=2 " 短暂跳转到匹配括号的时间
-set magic " 设置魔术
+set magic " 改变搜索模式所用的特殊字符，具体看手册
 set smartindent " 开启新行时使用智能自动缩进
 set backspace=indent,eol,start " 不设定在插入状态无法用退格键和 Delete 键删除回车符
 set cmdheight=1 " 设定命令行的行数为 1
+
+"""""" 折叠相关 
 set foldenable " 开始折叠
-set foldmethod=syntax " 设置语法折叠
+set foldmethod=syntax  " 设置语法折叠
 set foldcolumn=0 " 设置折叠区域的宽度
 setlocal foldlevel=9 " 设置折叠层数为 1
 "折叠  za,打开/关闭当前折叠；zM，关闭所有折叠；zR,打开所有折叠
@@ -131,6 +133,7 @@ exec ':noh'
 "================================================================
 
 call plug#begin('~/.config/nvim/plugged')
+
 "显示映射，函数，定义,显示markdown目录。good
 Plug 'liuchengxu/vista.vim'
 
@@ -149,12 +152,14 @@ Plug 'mbbill/undotree'
 
 "ranger
 Plug 'francoiscabrol/ranger.vim'
+Plug 'folke/tokyonight.nvim'
 
-"主题monokai
-Plug 'crusoexia/vim-monokai'
 
 "主题与代码高亮等 everforest
 Plug 'sainnhe/everforest'
+Plug 'morhetz/gruvbox'
+
+
 
 "多光标(没有用到)
 "Plug 'terryma/vim-multiple-cursors'
@@ -170,15 +175,12 @@ Plug 'honza/vim-snippets'
 
 "---------------markdown相关---------------
 
-"markdown文件预览
-Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
-
 "图片图片makrdown图片粘贴
 Plug 'ferrine/md-img-paste.vim'
 
 "markdown语法高亮等
 Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+Plug 'preservim/vim-markdown'
 
 "生成目录
 Plug 'mzlogin/vim-markdown-toc'
@@ -186,15 +188,10 @@ Plug 'mzlogin/vim-markdown-toc'
 "----------------代码相关------------------
 "括号
 Plug 'luochen1990/rainbow'
-
 "注释
 Plug 'preservim/nerdcommenter'
-
 "代码高亮
 "Plug 'octol/vim-cpp-enhanced-highlight'
-
-"显示当前文件的函数,映射mapping，变量
-"Plug 'majutsushi/tagbar'
 
 "代码智能补全……
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -205,10 +202,8 @@ Plug 'neoclide/coc-neco'
 "缩进块显示
 Plug 'Yggdroot/indentLine'
 
-
 "文件模糊寻找  使用命令:FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-
 
 call plug#end()
 
@@ -220,17 +215,6 @@ call plug#end()
 "================================================================
 "=======================插件配置=================================
 "================================================================
-"
-
-"=======================关于monolai插件的一些配置=======================
-"colorscheme monokai
-
-
-"==============<关于instantmarkdown插件的一些配置>==============
-
-let g:instant_markdown_autostart = 0  "开启手动启动预览窗口
-noremap <C-s> :InstantMarkdownPreview<CR>
-noremap <C-e> :InstantMarkdownStop<CR>
 
 
 "==============<关于everforest插件的一些配置>==============
@@ -249,6 +233,7 @@ set background=dark
 let g:everforest_background = 'hard'
 " For better performance
 let g:everforest_better_performance = 1
+
 colorscheme everforest
 
 
@@ -283,6 +268,7 @@ let g:vista#renderer#icons = {
 
 
 "======================<关于coc插件的一些配置>===================
+source ~/.config/nvim/coc.vim
 
 "当变量中包含的扩展名没有被安装的时候，安装那些扩展“
 let g:coc_global_extensions = [
@@ -448,6 +434,7 @@ map <space>i :IndentLinesToggle<CR>
 
 
 "=======================关于vim-markdown插件的一些配置=======================
+"gx: 打开光标下的链接
 "[[ "跳转上一个标题
 "]] "跳转下一个标题
 "]c "跳转到当前标题
@@ -457,16 +444,22 @@ map <space>i :IndentLinesToggle<CR>
 "zm "折叠当前段落
 "zM "折叠所有段落
 ":Toc "显示目录
+":InsertToc插入目录
+
 
 "禁用markdown语法隐藏
 let g:vim_markdown_conceal = 0
+"在启用LaTeX数学语法时禁用数学隐藏
 let g:tex_conceal = ""
 let g:vim_markdown_math = 1
+" 代码区域禁用隐藏
 let g:vim_markdown_conceal_code_blocks = 0
 
 "高亮数学公式
 let g:vim_markdown_math = 1 
 
+"改变markdown缩进为2
+let g:vim_markdown_new_list_item_indent = 2
 
 ""=======================关于vim-markdown-toc插件的一些配置=======================
 ""在当前光标后生成目录
@@ -615,4 +608,20 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 
 
+"========开启全彩支持
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
 
