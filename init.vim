@@ -137,6 +137,9 @@ call plug#begin('~/.config/nvim/plugged')
 "显示映射，函数，定义,显示markdown目录。good
 Plug 'liuchengxu/vista.vim'
 
+" 增强%的功能
+Plug 'andymass/vim-matchup'
+
 "允许<tab>能够满足所有的插件的插入完成需求，避免了插件间的冲突
 "通过设置不同插件实际上使用不同的按键，然后让这些按键功能可以通过tab来实现
 "Plug 'ervandew/supertab'
@@ -205,9 +208,10 @@ Plug 'Yggdroot/indentLine'
 "文件模糊寻找  使用命令:FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
+" ale
+Plug 'dense-analysis/ale'
+
 call plug#end()
-
-
 
 
 
@@ -215,6 +219,7 @@ call plug#end()
 "================================================================
 "=======================插件配置=================================
 "================================================================
+
 
 
 "==============<关于everforest插件的一些配置>==============
@@ -369,6 +374,9 @@ let g:coc_explorer_global_presets = {
 \   'notes': {
 \     'root-uri': '~/notes/',
 \   },
+\   'home': {
+\     'root-uri': '~/',
+\   },
 \   'workspace': {
 \     'root-uri': '~/workspace/',
 \   },
@@ -422,6 +430,7 @@ nmap <space>eb <Cmd>CocCommand explorer --preset buffer<CR>
 
 nmap <space>en <Cmd>CocCommand explorer --preset notes<CR>
 nmap <space>ew <Cmd>CocCommand explorer --preset workspace<CR>
+nmap <space>eh <Cmd>CocCommand explorer --preset home<CR>
 
 "显示所有的preset
 nmap <space>el <Cmd>CocList explPresets<CR>
@@ -599,7 +608,13 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 
+"======================关于ale插件的一些配置=======================
+let g:airline#extensions#ale#enabled = 1
 
+let g:ale_linters_explicit = 1
+let g:ale_linters = {
+\   'verilog': ['verilator'],
+\}
 
 
 
@@ -624,4 +639,54 @@ if (empty($TMUX))
     set termguicolors
   endif
 endif
+
+
+"========================================================
+"========================vim自动命令====================
+"========================================================
+
+
+"===============vtags和verilog编写相关配置==============
+"实现了每次进入.v文件时自动执行source ...指令
+"每次退出.v文件时更新vtags
+augroup AutoSourcevtags_vim_api
+  "autocmd!
+  autocmd BufEnter *.v source  ~/vtags-3.11/vtags_vim_api.vim
+  autocmd BufUnload *.v :!python3 /home/awjl/vtags-3.11/vtags.py
+augroup END
+
+
+"shortcut key	function
+"mt	            print module trace from top to current cursor module.
+"gi	            进入子模块
+"gu	            回到上层模块
+"gs	            trace source
+"gd	            trace destination
+"gf	            go forward
+"gb	            jjjroll back
+"<Space><Left>	trace source
+"<Space><Right>	trace destination
+"<Space><Down>	roll back
+"<Space><Up>	go forward
+"<Space> + v	显示侧边栏
+"<Space> + c	add checkpoint
+"<Space> + b	add basemodule
+"<Space> + d	delete
+"<Space> + h	hold cur window
+"<Space>	    quick access
+"<Space> + s	保存快照
+
+
+"==============markdown相关==============
+"每次进入markdown文件时，将tab缩进设置为2格
+"每次离开markdown文件时，将tab缩进设置回来
+
+augroup AutoSetMarkdownIndent
+  "autocmd!
+  autocmd BufEnter *.md :set shiftwidth=2
+augroup END
+
+
+
+
 

@@ -11,8 +11,8 @@
     "gj": ["wait", "expandableNext"],
     "h": ["wait", "collapse"],
     "l": ["wait", "expandable?", "expand", "open"],
-    "J": ["wait", "toggleSelection", "normal:j"],
-    "K": ["wait", "toggleSelection", "normal:k"],
+    "J": ["normal:5j"],
+    "K": ["normal:5k"],
     "gl": ["wait", "expand:recursive"],
     "gh": ["wait", "collapse:recursive"],
     "<2-LeftMouse>": [
