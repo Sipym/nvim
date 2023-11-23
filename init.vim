@@ -131,7 +131,6 @@ exec ':noh'
 "================ Install Plugins with vim-plug =================
 "=========================== 安装插件 ===========================
 "================================================================
-
 call plug#begin('~/.config/nvim/plugged')
 
 "显示映射，函数，定义,显示markdown目录。good
@@ -198,6 +197,7 @@ Plug 'preservim/nerdcommenter'
 
 "代码智能补全……
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 "使得coc支持vim补全
 Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
@@ -208,14 +208,11 @@ Plug 'Yggdroot/indentLine'
 "文件模糊寻找  使用命令:FZF
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
-" ale
+" ale,异步 Lint 引擎
+"" lint: 静态代码分析工具
 Plug 'dense-analysis/ale'
 
 call plug#end()
-
-
-
-
 "================================================================
 "=======================插件配置=================================
 "================================================================
@@ -241,6 +238,7 @@ let g:everforest_better_performance = 1
 
 colorscheme everforest
 
+"==============<关于vim-airline-themes插件的一些配置>==============
 
 "==============<关于tmuxline插件的一些配置>==============
 let g:airline#extensions#tmuxline#enabled = 0
@@ -276,14 +274,23 @@ let g:vista#renderer#icons = {
 source ~/.config/nvim/coc.vim
 
 "当变量中包含的扩展名没有被安装的时候，安装那些扩展“
-let g:coc_global_extensions = [
+let g:coc_global_extensions = [ 
+        \ 'coc-highlight',
+        \ 'coc-git',
+        \ 'coc-clang-format-style-options',
+        \ 'coc-cmake',
+        \ 'coc-markdown-preview-enhanced',
+        \ 'coc-explorer',
+        \ 'coc-markmap',
+        \ 'coc-webview',
+        \ 'coc-vimlsp',
 		\ 'coc-clangd',]
 
 set nobackup
 set nowritebackup
 set signcolumn=yes
 "设置coc的使用的node所在目录
-let g:coc_node_path = "/home/awjl/.nvm/versions/node/v16.17.1/bin/node" 
+let g:coc_node_path = "/home/awjl/.local/node/bin/node"
 
 "----------------tab cofig -------------------------
 "使用tab来选择代码不全的选择
@@ -598,7 +605,6 @@ map <leader>r :Ranger<CR>
 nmap <leader>i :GenTocGFM<CR>
 
 let g:vmt_cycle_list_item_markers = 1
-
 
 
 
