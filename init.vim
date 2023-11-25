@@ -187,6 +187,9 @@ Plug 'preservim/vim-markdown'
 "生成目录
 Plug 'mzlogin/vim-markdown-toc'
 
+"latex支持
+"Plug 'lervag/vimtex'
+
 "----------------代码相关------------------
 "括号
 Plug 'luochen1990/rainbow'
@@ -613,6 +616,11 @@ let g:UltiSnipsExpandTrigger="<c-t>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
+"查看当前文件格式的片段
+map <leader>u :UltiSnipsEdit<CR>
+""查看当前文件格式的片段时，选择打开一个新窗口
+let g:UltiSnipsEditSplit="tabdo"
+
 
 "======================关于ale插件的一些配置=======================
 let g:airline#extensions#ale#enabled = 1
@@ -623,6 +631,9 @@ let g:ale_linters = {
 \}
 
 
+""======================关于vimtex插件的一些配置=======================
+"let g:vimtex_view_general_viewer = 'okular'
+"let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 
 
 
@@ -690,6 +701,8 @@ augroup END
 augroup AutoSetMarkdownIndent
   "autocmd!
   autocmd BufEnter *.md :set shiftwidth=2
+  "为markdown的片段兼容tex片段支持
+  autocmd BufEnter *.md :UltiSnipsAddFiletypes markdown.tex
 augroup END
 
 
