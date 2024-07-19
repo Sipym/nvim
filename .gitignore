@@ -2,8 +2,12 @@
 autoload/
 myultisnips/
 plugged/
+markdown_dict/
+initvim/
+airline.tmux/
+!lua/
+!init.lua
 # 忽略所有的.d,.o文件
-
 *.[do]
 
 
