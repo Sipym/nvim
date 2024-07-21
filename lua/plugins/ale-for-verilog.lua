@@ -14,5 +14,8 @@ return {
                 let g:ale_verilog_verilator_options = '--timing'
             ]])
         end
+    },
+    {
+        "metalelf0/nvim-floatedit",
     }
 }

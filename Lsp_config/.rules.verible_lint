@@ -1,0 +1,8 @@
+-module-filename
++posix-eof
+-no-tabs
++line-length=length:120
+-unpacked-dimensions-range-ordering
+-always-comb
+-explicit-parameter-storage-type
+-parameter-name-style

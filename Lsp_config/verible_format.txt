@@ -1,0 +1,6 @@
+--column_limit=120
+--indentation_spaces=2
+--assignment_statement_alignment=align
+--inplace=true
+--module_net_variable_alignment=flush-left
+--named_port_alignmen=align
