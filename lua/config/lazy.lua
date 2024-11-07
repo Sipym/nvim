@@ -37,7 +37,6 @@ vim.cmd([[
     syntax on
     "共享剪切板,相互之间都共享
     set clipboard+=unnamedplus
-
     "不用鼠标
     set mouse=""
     set showmatch		" Show matching brackets.
@@ -54,9 +53,9 @@ vim.cmd([[
     set ruler " 打开状态栏标尺
     filetype indent on	" 自适应不同语言的智能缩进
     set expandtab	" 将制表符扩展为空格
-    set tabstop=4	" 设置编辑时制表符占用空格数
-    set shiftwidth=4	" 设置格式化时制表符占用空格数
-    set softtabstop=4	" 让 vim 把连续数量的空格视为一个制表符
+    set tabstop=2	" 设置编辑时制表符占用空格数
+    set shiftwidth=2	" 设置格式化时制表符占用空格数
+    set softtabstop=2	" 让 vim 把连续数量的空格视为一个制表符
     set nobackup " 覆盖文件时不备份
     set autochdir " 自动切换当前目录为当前文件所在的目录
     set backupcopy=yes " 设置备份时的行为为覆盖
@@ -144,6 +143,7 @@ vim.cmd([[
       "" verilog使用缩进的方式折叠
       autocmd BufEnter *.v set foldmethod=indent
       autocmd BufEnter *.v set shiftwidth=2
+      au BufRead,BufNewFile *.v set filetype=verilog
       au BufRead,BufNewFile *.vh set filetype=verilog
       autocmd BufEnter *.v source  ~/Software/vtags-3.11/vtags_vim_api.vim
       "这是用于实现保存，更新，我暂时关闭

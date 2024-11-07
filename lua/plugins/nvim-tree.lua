@@ -18,7 +18,13 @@ return {
             local api = require "nvim-tree.api"
 
             local function opts(desc)
-                return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+                return {
+                    desc = "nvim-tree: " .. desc,
+                    buffer = bufnr,
+                    noremap = true,
+                    silent = true,
+                    nowait = true,
+                }
             end
 
             -- default mappings
@@ -47,6 +53,16 @@ return {
             ---
             on_attach = my_on_attach,
             ---
+            filters = {
+                enable = true,
+                git_ignored = false,
+                dotfiles = false,
+                git_clean = false,
+                no_buffer = false,
+                no_bookmark = false,
+                custom = {},
+                exclude = {},
+            },
         }
         vim.cmd([[
             map <leader>e :NvimTreeToggle<CR>

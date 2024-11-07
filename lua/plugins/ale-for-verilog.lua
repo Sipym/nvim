@@ -15,7 +15,4 @@ return {
             ]])
         end
     },
-    {
-        "metalelf0/nvim-floatedit",
-    }
 }
