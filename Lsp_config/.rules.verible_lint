@@ -1,0 +1,10 @@
+-module-filename
++posix-eof
+-no-tabs
+-unpacked-dimensions-range-ordering
+-always-comb
+-explicit-parameter-storage-type
+-parameter-name-style
+-undersized-binary-literal
+-case-missing-default
+-line-length

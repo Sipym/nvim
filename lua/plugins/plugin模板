@@ -1,0 +1,14 @@
+--- 功能: 
+return {
+    {
+        "插件的url",
+        version = "*",
+        dependencies = {""},
+        config = function()
+            ..
+            vim.cmd([[
+                ..
+            ]])
+        end
+    }
+}
