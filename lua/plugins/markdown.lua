@@ -30,6 +30,7 @@ return {
     },
     config = function()
       vim.g.mkdp_theme = 'light'
+      vim.g.mkdp_combine_preview = 1
     end
   },
 }
