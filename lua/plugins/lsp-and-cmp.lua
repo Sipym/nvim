@@ -81,9 +81,41 @@ return {
         end,
       },
     })
+    -- ===============================================
+    -- 配置各个lsp的方式，这是配置verible
+    -- ===============================================
     require 'lspconfig'.verible.setup {
       cmd = { "verible-verilog-ls", "--rules_config", "/home/awjl/.config/nvim/Lsp_config/.rules.verible_lint", "--flagfile", "/home/awjl/.config/nvim/Lsp_config/verible_format.txt" }
     }
+
+    --require 'lspconfig'.svlangserver.setup {
+      --on_init = function(client)
+        --local path = client.workspace_folders[1].name
+
+        --if path == '~/workspace/ysyx/ysyx-workbench/npc' then
+          --client.config.settings.systemverilog = {
+            --includeIndexing     = { "**/*.{v,vh}" },
+            --defines             = {},
+            --launchConfiguration = "verilator  -Wall --lint-only",
+            --formatCommand       = "verible-verilog-format"
+          --}
+        --elseif path == '/path/to/project2' then
+          --client.config.settings.systemverilog = {
+            --includeIndexing     = { "**/*.{sv,svh}" },
+            --excludeIndexing     = { "sim/**/*.sv*" },
+            --defines             = {},
+            --launchConfiguration = "/tools/verilator -sv -Wall --lint-only",
+            --formatCommand       = "/tools/verible-verilog-format"
+          --}
+        --end
+
+        --client.notify("workspace/didChangeConfiguration")
+        --return true
+      --end
+    --}
+
+    ---------------end--------------------------------
+
     local cmp_action = require("lsp-zero").cmp_action()
     local cmp = require("cmp")
     local cmp_select = { behavior = cmp.SelectBehavior.Select }

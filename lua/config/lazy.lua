@@ -73,7 +73,7 @@ vim.cmd([[
     set foldenable " 开始折叠
     set foldmethod=indent  " 设置语法折叠
     set foldcolumn=0 " 设置折叠区域的宽度
-    set foldlevelstart=2
+    set foldlevelstart=9
     setlocal foldlevel=9 " 设置折叠层数为 1
     "折叠  za,打开/关闭当前折叠；zM，关闭所有折叠；zR,打开所有折叠
 
