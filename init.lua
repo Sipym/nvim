@@ -1,3 +1,4 @@
+-- 绑定<leader>为‘;’
 vim.g.mapleader = ';'
 require("config.lazy")
 

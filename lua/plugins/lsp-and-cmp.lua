@@ -18,6 +18,7 @@ return {
     { "hrsh7th/nvim-cmp" },         -- Required
     { "hrsh7th/cmp-nvim-lsp" },     -- Required
     { "L3MON4D3/LuaSnip" },         -- Required
+
     { "rafamadriz/friendly-snippets" },
     { "hrsh7th/cmp-buffer" },
     { "hrsh7th/cmp-path" },
@@ -32,39 +33,67 @@ return {
 
       vim.keymap.set("n", "gr", function() vim.lsp.buf.references() end,
         vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Reference" }))
-      vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end,
-        vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition" }))
+
+
+      vim.keymap.set("n", "gdn", function()
+        require('telescope.builtin').lsp_definitions({jump_type = 'never'})
+      end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition (never)" }))
+
+      vim.keymap.set("n", "gdv", function()
+        require('telescope.builtin').lsp_definitions({jump_type = 'vsplit'})
+      end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition (vsplit)" }))
+
+      vim.keymap.set("n", "gds", function()
+        require('telescope.builtin').lsp_definitions({jump_type = 'split'})
+      end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition (split)" }))
+
+      vim.keymap.set("n", "gdt", function()
+        require('telescope.builtin').lsp_definitions({jump_type = 'tab'})
+      end, vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition (tab)" }))
+
       vim.keymap.set("n", "<leader>vf", function()
           --vim.cmd ([[:leftabove vsplit]])
           vim.cmd([[:tab sp]])
           vim.lsp.buf.definition()
         end,
         vim.tbl_deep_extend("force", opts, { desc = "LSP Goto Definition in new window" }))
+
       vim.keymap.set("n", "<leader>vs", function() vim.lsp.buf.hover() end,
         vim.tbl_deep_extend("force", opts, { desc = "LSP Hover" }))                           -- 查看符号信息,如函数定义的注释等
+
       vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end,       -- 查看工作去符号信息
         vim.tbl_deep_extend("force", opts, { desc = "LSP Workspace Symbol" }))
+
       vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.setloclist() end,
         vim.tbl_deep_extend("force", opts, { desc = "LSP Show Diagnostics" }))
-      vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end,
-        vim.tbl_deep_extend("force", opts, { desc = "Next Diagnostic" }))
-      vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end,
-        vim.tbl_deep_extend("force", opts, { desc = "Previous Diagnostic" }))
-      vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end,
+
+      vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end,  -- 根据诊断信息来修复代码
         vim.tbl_deep_extend("force", opts, { desc = "LSP Code Action" }))
+
       vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end,
         vim.tbl_deep_extend("force", opts, { desc = "LSP References" }))         -- 类似gr
+
       vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end,
         vim.tbl_deep_extend("force", opts, { desc = "LSP Rename" }))
+
       vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end,
         vim.tbl_deep_extend("force", opts, { desc = "LSP Signature Help" }))
+
+      -- 诊断信息相关的设置
+      vim.diagnostic.config({
+        virtual_text = true,  -- 在行尾显示错误信息
+        signs = true,         -- 显示诊断标志（图标）
+        underline = true,     -- 错误行下划线
+        update_in_insert = true, --输入模式下也可以检查错误
+        severity_sort = true,
+      })
     end)
 
 
     require("mason").setup({})
     require("mason-lspconfig").setup({
       ensure_installed = {
-        "marksman",         -- for markdown
+        "markdown_oxide", -- nvim Obsidian Lsp,能够提供文件间跳转,并且支持双向链接
         "lua_ls",
         --"tsserver",
         "html",
@@ -87,32 +116,6 @@ return {
     require 'lspconfig'.verible.setup {
       cmd = { "verible-verilog-ls", "--rules_config", "/home/awjl/.config/nvim/Lsp_config/.rules.verible_lint", "--flagfile", "/home/awjl/.config/nvim/Lsp_config/verible_format.txt" }
     }
-
-    --require 'lspconfig'.svlangserver.setup {
-      --on_init = function(client)
-        --local path = client.workspace_folders[1].name
-
-        --if path == '~/workspace/ysyx/ysyx-workbench/npc' then
-          --client.config.settings.systemverilog = {
-            --includeIndexing     = { "**/*.{v,vh}" },
-            --defines             = {},
-            --launchConfiguration = "verilator  -Wall --lint-only",
-            --formatCommand       = "verible-verilog-format"
-          --}
-        --elseif path == '/path/to/project2' then
-          --client.config.settings.systemverilog = {
-            --includeIndexing     = { "**/*.{sv,svh}" },
-            --excludeIndexing     = { "sim/**/*.sv*" },
-            --defines             = {},
-            --launchConfiguration = "/tools/verilator -sv -Wall --lint-only",
-            --formatCommand       = "/tools/verible-verilog-format"
-          --}
-        --end
-
-        --client.notify("workspace/didChangeConfiguration")
-        --return true
-      --end
-    --}
 
     ---------------end--------------------------------
 
@@ -156,6 +159,7 @@ return {
         { name = "luasnip",  keyword_length = 2 },
         { name = "buffer",   keyword_length = 2 },
         { name = "path" },
+        { name = "render-markdown" },
       },
       mapping = cmp.mapping.preset.insert({
         ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),

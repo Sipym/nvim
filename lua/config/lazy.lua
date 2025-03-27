@@ -1,5 +1,5 @@
 -- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/home/awjl/.local/share/nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
     local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
@@ -13,7 +13,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
         os.exit(1)
     end
 end
-vim.opt.rtp:prepend(lazypath)
+vim.opt.rtp:prepend(lazypath) -- 添加runtime path
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
 -- This is also a good place to setup other settings (vim.opt)
@@ -28,23 +28,6 @@ vim.cmd([[
     "=========================================================
     "===================== vim自身配置 =======================
     "=========================================================
-
-    "使得vim首先在当前目录寻找tags文件，如果没有则往上递归寻找
-    set tags=tags;
-    set autochdir
-    set background=dark
-    syntax enable  "开启语法高亮
-    syntax on
-    "共享剪切板,相互之间都共享
-    set clipboard+=unnamedplus
-    "不用鼠标
-    set mouse=""
-    set showmatch		" Show matching brackets.
-    set wildmenu	    "补全命令
-    set ignorecase		" Do case insensitive matching
-    set smartcase		" Do smart case matching
-    set incsearch		" Incremental search
-    set hidden		" Hide buffers when they are abandoned
     setlocal noswapfile " 不要生成swap文件
     set bufhidden=hide " 当buffer被丢弃的时候隐藏它
     set rnu         "显示相对行数
@@ -128,10 +111,6 @@ vim.cmd([[
     map th :-tabnext<CR>
     map tl :+tabnext<CR>
 
-    "打开vim时执行消除高亮命令
-    noremap S :source $MYVIMRC <CR>
-    exec ':noh'
-
     "========================================================
     "========================vim自动命令====================
     "========================================================
@@ -171,22 +150,31 @@ vim.cmd([[
     "<Space> + h	hold cur window
     "<Space>	    quick access
     "<Space> + s	保存快照
-
-
-    "==============markdown相关==============
-    "每次进入markdown文件时，将tab缩进设置为2格
-    "每次离开markdown文件时，将tab缩进设置回来
-
-    augroup AutoSetMarkdownIndent
-      "autocmd!
-      autocmd BufEnter *.md :set shiftwidth=3
-      "为markdown的片段兼容tex片段支持
-      autocmd BufEnter *.md :UltiSnipsAddFiletypes markdown.tex
-
-      "autocmd BufEnter *.md :set complete+=k
-      "" 为markdown添加补全字典
-      "autocmd BufEnter *.md :set dictionary+=/home/awjl/1.txt
-    augroup END
-
-
 ]])
+
+-- ============================================================
+-- Nvim基本配置
+-- ============================================================
+
+vim.cmd.syntax("on")  -- 启用语法高亮
+
+vim.opt.clipboard        = 'unnamedplus' -- 共享剪切板
+vim.opt.mouse            = ''            -- 不使用鼠标
+vim.opt.ignorecase       = true          -- 匹配时不区分大小写
+vim.opt.smartcase        = true          -- 匹配字符串中如果包含大写，则忽略ignorecase选项
+vim.opt.incsearch        = true          -- 匹配模式中，随着字符的输入,实时显示匹配的pattern
+vim.opt.hidden           = true          -- 当关闭缓冲区的时候，不会删除它,而是隐藏他
+vim.opt.signcolumn       = 'yes'         -- 在左边预留一个空间，避免布局出现偏移
+vim.opt.conceallevel     = 1
+
+
+
+
+
+
+
+
+
+
+
+

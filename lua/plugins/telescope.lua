@@ -10,7 +10,7 @@ return {
         dependencies = {
             { 'nvim-lua/plenary.nvim' },
             { 'sharkdp/fd' },
-            {'nvim-tree/nvim-web-devicons'},
+            { 'nvim-tree/nvim-web-devicons'},
             { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' },
         },
         config = function()

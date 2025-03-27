@@ -1,0 +1,112 @@
+-- LSP安装与配置 + 代码补全
+return {
+  -- LSP Support
+  "neovim/nvim-lspconfig",
+  dependencies = {
+    {
+      -- LSP安装工具
+      "williamboman/mason.nvim",
+      build = function()
+        pcall(function() vim.cmd("MasonUpdate") end)
+      end,
+    },
+    { "williamboman/mason-lspconfig.nvim" },     -- Optional
+
+    -- Autocompletion
+    { "hrsh7th/nvim-cmp" },         -- Required
+    { "hrsh7th/cmp-nvim-lsp" },     -- Required
+
+    --{ "L3MON4D3/LuaSnip" },         -- Required
+
+    --{ "rafamadriz/friendly-snippets" },
+    --{ "hrsh7th/cmp-buffer" },
+    --{ "hrsh7th/cmp-path" },
+    --{ "hrsh7th/cmp-cmdline" },
+    --{ "saadparwaiz1/cmp_luasnip" },
+  },
+  config = function()
+    -- Add cmp_nvim_lsp capabilities settings to lspconfig
+    -- This should be executed before you configure any language server
+    local lspconfig_defaults = require('lspconfig').util.default_config
+    lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+      'force',
+      lspconfig_defaults.capabilities,
+      require('cmp_nvim_lsp').default_capabilities()
+    )
+
+    -- This is where you enable features that only work
+    -- if there is a language server active in the file
+    vim.api.nvim_create_autocmd('LspAttach', {
+      desc = 'LSP actions',
+      callback = function(event)
+        local opts = {buffer = event.buf}
+
+        vim.keymap.set('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Hover" }))
+        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Goto Definition" }))
+        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Goto Declaration" }))
+        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Goto Reference" }))
+        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Implementation" }))
+        vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Type Definition" }))
+        vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Signature Help" }))
+        vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Rename" }))
+        vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>',
+          vim.tbl_deep_extend('force',opts,{ desc = "LSP Code Action" }))
+      end,
+    })
+    require('mason').setup({})
+    require('mason-lspconfig').setup({
+      ensure_installed = {
+        "marksman",         -- for markdown
+        "lua_ls",
+        --"tsserver",
+        "html",
+        "pylsp",
+        "bashls",
+        "clangd",
+        "verible",
+      },
+      handlers = {
+        function(server_name)
+          require('lspconfig')[server_name].setup({})
+        end,
+      },
+    })
+
+    ---
+    -- Autocompletion config
+    ---
+    local cmp = require('cmp')
+
+    cmp.setup({
+      sources = {
+        {name = 'nvim_lsp'},
+      },
+      mapping = cmp.mapping.preset.insert({
+        -- `Enter` key to confirm completion
+        ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+        -- Ctrl+Space to trigger completion menu
+        ['<C-Space>'] = cmp.mapping.complete(),
+
+        -- Scroll up and down in the completion documentation
+        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(4),
+      }),
+      snippet = {
+        expand = function(args)
+          vim.snippet.expand(args.body)
+        end,
+      },
+    })
+
+  end,
+
+}
