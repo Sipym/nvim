@@ -155,7 +155,7 @@ return {
       },
       sources = {
         { name = "nvim_lsp" },
-        { name = 'ultisnips' },
+        --{ name = 'ultisnips' },
         { name = "luasnip",  keyword_length = 2 },
         { name = "buffer",   keyword_length = 2 },
         { name = "path" },
