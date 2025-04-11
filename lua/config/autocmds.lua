@@ -51,5 +51,15 @@ vim.cmd([[
     "<Space> + h	hold cur window
     "<Space>	    quick access
     "<Space> + s	保存快照
-]])
 
+  " augroup AutoSetMarkdownIndent
+  "   "autocmd!
+  "   autocmd BufEnter *.md :set shiftwidth=3
+  "   "为markdown的片段兼容tex片段支持
+  "   autocmd BufEnter *.md :UltiSnipsAddFiletypes markdown.tex
+  " 
+  "   "autocmd BufEnter *.md :set complete+=k
+  "   "" 为markdown添加补全字典
+  "   "autocmd BufEnter *.md :set dictionary+=/home/awjl/1.txt
+  " augroup END
+]])

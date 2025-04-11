@@ -8,6 +8,8 @@ vim.opt.fileencoding   = "utf-8"
 
 vim.opt.bufhidden      = "hide"
 vim.opt.relativenumber = true
+vim.opt.autochdir = true
+vim.opt.swapfile       = false
 vim.opt.number         = true
 vim.opt.cursorline     = true -- 突出显示当前行
 vim.opt.showcmd        = true

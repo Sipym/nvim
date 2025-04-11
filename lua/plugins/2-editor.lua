@@ -1,10 +1,6 @@
---- 功能:  快速注释/取消注释 选中行
-
--- <leader>ci 注释/取消注释
--- <leader>cc 注释
+-- 增强编辑体验
 return {
-  --用了太多快捷键了，不值当。
-  -- add this to your lua/plugins.lua, lua/plugins/init.lua,  or the file you keep your other plugins:
+  -- comment
   {
     'numToStr/Comment.nvim',
     opts = {
@@ -50,5 +46,52 @@ return {
       ---Function to call after (un)comment
       post_hook = nil,
     } -- add any options here
+  },
+
+  -- nvim-surround
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  },
+
+  -- undotree
+  {
+    "mbbill/undotree",
+    config = function()
+      vim.cmd([[
+        nnoremap <F5> :UndotreeToggle<CR>
+        "将撤销文件存储在一个单独的位置
+        if has("persistent_undo")
+           let target_path = expand('~/.undodir')
+
+            " create the directory and any parent directories
+            " if the location does not exist.
+            if !isdirectory(target_path)
+                call mkdir(target_path, "p", 0700)
+            endif
+
+            let &undodir=target_path
+            set undofile
+        endif
+        ]])
+    end
+  },
+  -- zen mode
+  {
+    "folke/zen-mode.nvim",
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+    config = function ()
+      vim.keymap.set('n', "<leader>z", ":ZenMode<CR>", { desc = "ZenMode"})
+    end
   }
 }
