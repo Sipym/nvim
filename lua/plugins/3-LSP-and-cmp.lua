@@ -43,7 +43,7 @@ return {
 				"html",
 				"cssls",
 				"jsonls",
-				"marksman", -- Markdown (推荐)
+				"markdown_oxide", -- Markdown (推荐)
 				"verible",
 			},
 			-- 是否自动安装 ensure_installed 中的服务器
@@ -64,7 +64,7 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"hrsh7th/cmp-nvim-lsp", -- nvim-cmp 的 LSP 补全源
 			-- (可选但推荐) UI 增强
-			"j-hui/fidget.nvim",
+			-- "j-hui/fidget.nvim", -- noice.nvim插件覆盖了这个内容
 			"onsails/lspkind.nvim",
 		},
 		config = function()
@@ -79,21 +79,43 @@ return {
 			--    这些设置影响所有 LSP 服务器提供的诊断信息显示方式
 			vim.diagnostic.config({
 				virtual_text = true, -- 在行尾显示简短诊断信息 (可配置更详细)
-				signs = true, -- 在行号列显示诊断图标
 				underline = true, -- 高亮显示有诊断信息的文本
 				update_in_insert = true, -- 插入模式下更新诊断，会降低性能
 				severity_sort = true, -- 按严重性对诊断排序
 				float = { border = "rounded" }, -- !!使用这里统一配置诊断浮动窗口边框 ！！
+				signs = {
+					-- 是否启用行号栏图标显示 (通常为 true)
+					active = true,
+					-- 定义每个诊断级别的图标和其他属性
+					-- 使用 vim.diagnostic.severity 下的常量作为键更标准
+					severity = {
+						[vim.diagnostic.severity.ERROR] = {
+							text = "", -- 图标文本 (需要 Nerd Font)
+							texthl = "DiagnosticSignError", -- 图标本身的高亮组
+							-- linehl = '',                   -- (可选) 整行的高亮组
+							numhl = "DiagnosticSignError", -- (可选) 行号的高亮组
+						},
+						[vim.diagnostic.severity.WARN] = {
+							text = "",
+							texthl = "DiagnosticSignWarn",
+							numhl = "DiagnosticSignWarn",
+						},
+						[vim.diagnostic.severity.INFO] = {
+							text = "",
+							texthl = "DiagnosticSignInfo",
+							numhl = "DiagnosticSignInfo",
+						},
+						[vim.diagnostic.severity.HINT] = {
+							text = "󰌵",
+							texthl = "DiagnosticSignHint",
+							numhl = "DiagnosticSignHint",
+						},
+					},
+				},
 			})
-			-- (可选) 定义诊断级别的图标 (需要 Nerd Font)
-			local signs = { Error = " ", Warn = " ", Hint = "󰌵 ", Info = " " }
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-			end
 
 			-- (可选) 配置 fidget.nvim (右上角 LSP 状态指示器)
-			require("fidget").setup({})
+			-- require("fidget").setup({})
 
 			-- =========================================================== --
 			-- == 核心 LSP 设置 (on_attach 和 capabilities) ==
@@ -121,8 +143,6 @@ return {
 					end
 					vim.keymap.set(mode, lhs, rhs, opts)
 				end
-
-				print("LSP attached: " .. client.name .. " to buffer " .. bufnr)
 
 				-- === 设置 LSP 相关快捷键 ===
 
@@ -342,7 +362,7 @@ return {
 				mapping = cmp.mapping.preset.insert({
 					["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
 					["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-          ["<C-b>"] = cmp.mapping.scroll_docs(-4), -- 上翻文档
+					["<C-b>"] = cmp.mapping.scroll_docs(-4), -- 上翻文档
 					["<C-f>"] = cmp.mapping.scroll_docs(4), -- 下翻文档
 					["<C-Space>"] = cmp.mapping.complete(), -- 手动触发补全
 					["<C-e>"] = cmp.mapping.abort(), -- 中止补全
@@ -417,27 +437,27 @@ return {
 	-- ========================================== --
 	-- (依赖) UI 增强插件 (可选但推荐)
 	-- ========================================== --
-	{ "j-hui/fidget.nvim", tag = "legacy", opts = {} }, -- LSP 状态显示
+	-- { "j-hui/fidget.nvim", tag = "legacy", opts = {} }, -- LSP 状态显示
 	{ "onsails/lspkind.nvim" }, -- 补全图标
 
 	-- ========================================== --
 	-- 增强签名帮助 (lsp_signature.nvim)
 	-- ========================================== --
-	{
-		"ray-x/lsp_signature.nvim",
-		event = "InsertEnter", -- 或者 "LspAttach"
-		opts = {
-			bind = true, -- 让插件处理绑定快捷键 (包括触发)
-			handler_opts = {
-				border = "rounded", -- 签名帮助窗口边框样式
-			},
-			hint_enable = false, -- (可选) 禁用参数名称的虚拟文本提示，如果你觉得干扰的话
-			-- hi_parameter = "IncSearch", -- (可选) 高亮当前参数的样式
-			-- zindex = 200, -- (可选) 调整窗口层级
-			-- toggle_key = "<M-s>", -- (可选) 设置一个快捷键来手动切换签名帮助窗口的显示/隐藏
-		},
-		config = function(_, opts)
-			require("lsp_signature").setup(opts)
-		end,
-	},
+	-- {
+	-- 	"ray-x/lsp_signature.nvim",
+	-- 	event = "InsertEnter", -- 或者 "LspAttach"
+	-- 	opts = {
+	-- 		bind = true, -- 让插件处理绑定快捷键 (包括触发)
+	-- 		handler_opts = {
+	-- 			border = "rounded", -- 签名帮助窗口边框样式
+	-- 		},
+	-- 		hint_enable = false, -- (可选) 禁用参数名称的虚拟文本提示，如果你觉得干扰的话
+	-- 		-- hi_parameter = "IncSearch", -- (可选) 高亮当前参数的样式
+	-- 		-- zindex = 200, -- (可选) 调整窗口层级
+	-- 		-- toggle_key = "<M-s>", -- (可选) 设置一个快捷键来手动切换签名帮助窗口的显示/隐藏
+	-- 	},
+	-- 	config = function(_, opts)
+	-- 		require("lsp_signature").setup(opts)
+	-- 	end,
+	-- },
 }

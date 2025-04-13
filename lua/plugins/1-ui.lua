@@ -233,28 +233,113 @@ return {
 
 	-- nvim-notify
 	-- lua/plugins/notify.lua (或者你的插件配置文件)
+	-- {
+	-- 	"rcarriga/nvim-notify",
+	-- 	opts = {
+	-- 		level = vim.log.levels.INFO, -- 最低显示级别
+	-- 		timeout = 4000, -- 默认超时时间 (毫秒)
+	-- 		fps = 60,
+	--      background_colour = vim.fn.hlexists("NormalFloat") > 0 and "NormalFloat" or "Normal",
+	-- 	},
+	-- 	config = function(_, opts)
+	-- 		-- 非常重要的一步：让 nvim-notify 接管 vim.notify
+	-- 		vim.notify = require("notify")
+	-- 		-- 应用配置
+	-- 		require("notify").setup(opts)
+	--
+	-- 		-- (可选) 设置 Telescope 集成，用于查看通知历史
+	-- 		local telescope_ok, telescope = pcall(require, "telescope")
+	-- 		if telescope_ok then
+	-- 			telescope.load_extension("notify")
+	-- 			vim.keymap.set("n", "<leader>fn", function() -- un: user notify
+	-- 				telescope.extensions.notify.notify()
+	-- 			end, { desc = "查看通知历史" })
+	-- 		end
+	-- 	end,
+	-- },
+
+	-- noice.nvim
 	{
-		"rcarriga/nvim-notify",
+		"folke/noice.nvim",
+		event = "VeryLazy",
+		module = "noice",
 		opts = {
-			level = vim.log.levels.INFO, -- 最低显示级别
-			timeout = 4000, -- 默认超时时间 (毫秒)
-			fps = 60,
-      background_colour = vim.fn.hlexists("NormalFloat") > 0 and "NormalFloat" or "Normal",
+			cmdline = {
+				enabled = true,
+				view = "cmdline_popup",
+			},
+			messages = {
+				enabled = false,
+			},
+			popupmenu = {
+				enabled = true,
+				backend = "nui",
+			},
+			notify = {
+				enabled = true,
+				view = "notify",
+			},
+			lsp = {
+				override = {
+					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+					["vim.lsp.util.stylize_markdown"] = true,
+					["cmp.entry.get_documentation"] = false,
+				},
+				hover = { enabled = true },
+				signature = { enabled = true },
+				-- 没有单独设置signature,hover时，都会用documentation的配置
+				documentation = { -- 这个部分定义了 hover 和 signature 的默认视图和选项
+					view = "hover", -- 定义默认视图名
+				},
+			},
+
+			-- 所有视图配置都在views中设置就行，然后其他各个块，只用选择选用那种视图就行。
+			--- 如果想要单独配置，就到各个块里单独设置就行
+			views = {
+				cmdline_popup = {
+					position = {
+						row = 20,
+						col = "50%",
+					},
+					size = {
+						width = 60,
+						height = "auto",
+					},
+				},
+				hover = {
+					border = {
+						style = "rounded",
+					},
+					position = { row = 2, col = 0 },
+				},
+			},
+
+			presets = {
+				bottom_search = true,
+				command_palette = true,
+			},
+		},
+		dependencies = {
+			-- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+			"MunifTanjim/nui.nvim",
+			-- OPTIONAL:
+			--   `nvim-notify` is only needed, if you want to use the notification view.
+			--   If not available, we use `mini` as the fallback
+			"rcarriga/nvim-notify",
 		},
 		config = function(_, opts)
-			-- 非常重要的一步：让 nvim-notify 接管 vim.notify
-			vim.notify = require("notify")
-			-- 应用配置
-			require("notify").setup(opts)
+			require("noice").setup(opts)
+			vim.keymap.set({ "n", "i", "s" }, "<c-f>", function()
+				if not require("noice.lsp").scroll(4) then
+					return "<c-f>"
+				end
+			end, { silent = true, expr = true })
 
-			-- (可选) 设置 Telescope 集成，用于查看通知历史
-			local telescope_ok, telescope = pcall(require, "telescope")
-			if telescope_ok then
-				telescope.load_extension("notify")
-				vim.keymap.set("n", "<leader>fn", function() -- un: user notify
-					telescope.extensions.notify.notify()
-				end, { desc = "查看通知历史" })
-			end
+			vim.keymap.set({ "n", "i", "s" }, "<c-b>", function()
+				if not require("noice.lsp").scroll(-4) then
+					return "<c-b>"
+				end
+			end, { silent = true, expr = true })
 		end,
 	},
 }

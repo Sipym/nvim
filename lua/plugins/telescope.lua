@@ -21,6 +21,9 @@ return {
     },
     config = function()
       require("telescope").setup()
+			vim.keymap.set("n", "<leader>fn", function() -- un: user notify
+				require("telescope").extensions.notify.notify()
+			end, { desc = "查看通知历史" })
     end,
   },
   -- 为telescope服务
