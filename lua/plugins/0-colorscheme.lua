@@ -34,6 +34,8 @@ return {
         dim_inactive = false,
         transparent_mode = false,
       })
+
+      -- 定义高亮组
     end
   }
 }

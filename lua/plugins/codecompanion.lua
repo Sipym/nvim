@@ -8,7 +8,7 @@ return {
       },
       config = function()
         -- Key Map
-        vim.keymap.set({ 'n', 'v' }, '<leader>cca', ':CodeCompanionActions<cr>', { desc = "Open CodeCompanionActions" });
+        vim.keymap.set({ 'n', 'v' }, '<leader>cp', ':CodeCompanionActions<cr>', { desc = "Open CodeCompanionActions" });
         vim.keymap.set('n', '<leader>cc', ':CodeCompanionChat Toggle<cr>', { desc = "Toggle CodeCompanionChat" });
         vim.keymap.set('v', '<leader>cv', ':CodeCompanionChat Add<cr>',
           { desc = "Add visually selected chat to current chat buffer" });

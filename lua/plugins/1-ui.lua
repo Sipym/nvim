@@ -329,6 +329,9 @@ return {
 		},
 		config = function(_, opts)
 			require("noice").setup(opts)
+			require("notify").setup({
+				background_colour = vim.fn.hlexists("NormalFloat") > 0 and "NormalFloat" or "Normal",
+			})
 			vim.keymap.set({ "n", "i", "s" }, "<c-f>", function()
 				if not require("noice.lsp").scroll(4) then
 					return "<c-f>"

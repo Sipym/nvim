@@ -153,7 +153,7 @@ return {
 				map("n", "gI", vim.lsp.buf.implementation, "Goto Implementation") -- 跳转到实现
 
 				-- 跳转 (使用 Telescope - 需要安装和配置 telescope.nvim)
-				map("n", "gr", function()
+				map("n", "grr", function()
 					require("telescope.builtin").lsp_references()
 				end, "Goto References (Telescope)")
 				map("n", "gdn", function()

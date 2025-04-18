@@ -11,8 +11,7 @@ vim.cmd([[
 
 -- 设置主题
 vim.cmd([[colorscheme gruvbox]])
+
 vim.o.background = "light" -- or "light" for light mode
 --vim.g.material_style = "Oceanic"
 vim.opt.termguicolors = true
-
-
