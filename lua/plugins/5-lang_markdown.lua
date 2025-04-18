@@ -1,21 +1,6 @@
 -- markdown相关插件
 return {
-	----- md-img-paste
-	--- 功能:  makrdown:快速的插入图片
-	{
-		"ferrine/md-img-paste.vim",
-		ft = { "markdown" },
-		config = function()
-			vim.cmd([[
-                autocmd FileType markdown nmap <buffer><silent> <space>p :call mdip#MarkdownClipboardImage()<CR>
-                " there are some defaults for image directory and image name, you can change them
-                " let g:mdip_imgdir = '.'
-                " let g:mdip_imgname = 'image'
-                "autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
-            ]])
-		end,
-	},
-	-- install with yarn or npm
+	-- markdown-preview
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
@@ -55,7 +40,7 @@ return {
 	},
 
 	-- ========================================== --
-	-- obsidian.nvim 
+	-- obsidian.nvim
 	-- ========================================== --
 	{
 		"epwalsh/obsidian.nvim",
@@ -96,8 +81,7 @@ return {
 			new_notes_location = "notes_subdir",
 			preferred_link_style = "wiki",
 			disable_frontmatter = false,
-			-- Optional, by default when you use `:ObsidianFollowLink` on a link to an external
-			-- URL it will be ignored but you can customize this behavior here.
+
 			---@param url string
 			follow_url_func = function(url)
 				-- Open the URL in the default web browser.
@@ -118,8 +102,6 @@ return {
 				end
 			end,
 
-			-- Optional, by default when you use `:ObsidianFollowLink` on a link to an image
-			-- file it will be ignored but you can customize this behavior here.
 			---@param img string
 			follow_img_func = function(img)
 				local uname = vim.loop.os_uname()
@@ -207,6 +189,13 @@ return {
 			templates = {
 				folder = "00-Meta",
 			},
+
+			attachments = {
+				img_folder = "70-Assets/imgs",
+			},
+      -- 可以添加在官方提供的回调函数中，添加任意行为,如进入notes时，触发某种行为
+      callbacks = {
+      },
 		},
 		config = function(_, opts)
 			require("obsidian").setup(opts)
@@ -218,7 +207,8 @@ return {
       vim.keymap.set('n','<leader>og',"<cmd>ObsidianSearch<CR>", {desc = "Obsidian: Search In All vaults By grep"})
       vim.keymap.set('n','<leader>or',"<cmd>ObsidianBacklinks<CR>", {desc = "Obsidian: Back links"})
       vim.keymap.set('n','<leader>ot',"<cmd>ObsidianTags<CR>", {desc = "Obsidian: Search by Tags"})
-      vim.keymap.set('n','<leader>op',"<cmd>ObsidianTemplate<CR>", {desc = "Obsidian: Paste Template"})
+      vim.keymap.set('n','<leader>oi',"<cmd>ObsidianTemplate<CR>", {desc = "Obsidian: Insert Template"})
+      vim.keymap.set('n','<leader>op',"<cmd>ObsidianPasteImg<CR>", {desc = "Obsidian: Paste Image"})
       vim.keymap.set('n','<leader>ol',"<cmd>ObsidianLinks<CR>", {desc = "Obsidian: All Links In Buffer"})
       vim.keymap.set('n','<leader>oe',"<cmd>ObsidianExtractNote<CR>", {desc = "Obsidian: Move the Visualed To new notes and Link it"})
 			-- stylua: ignore end
