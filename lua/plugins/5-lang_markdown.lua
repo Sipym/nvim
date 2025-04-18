@@ -122,8 +122,21 @@ return {
 			-- file it will be ignored but you can customize this behavior here.
 			---@param img string
 			follow_img_func = function(img)
-				vim.fn.jobstart({ "qlmanage", "-p", img }) -- Mac OS quick look preview
-				-- vim.fn.jobstart({ "xdg-open", img }) -- linux
+				local uname = vim.loop.os_uname()
+				if uname and uname.sysname then
+					if uname.sysname == "Darwin" then
+						-- macOS
+						vim.fn.jobstart({ "qlmanage", "-p", img }) -- Mac OS quick look preview
+					elseif uname.sysname == "Linux" then
+						-- Linux
+						vim.fn.jobstart({ "xdg-open", img }) -- linux
+					else
+						-- Unsupported OS
+						print("Unsupported OS: " .. uname.sysname)
+					end
+				else
+					print("Failed to determine OS.")
+				end
 				-- vim.cmd(':silent exec "!start ' .. url .. '"') -- Windows
 			end,
 
