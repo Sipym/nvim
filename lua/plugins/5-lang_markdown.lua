@@ -55,13 +55,13 @@ return {
 	},
 
 	-- ========================================== --
-	-- obsidian.nvim
+	-- obsidian.nvim 
 	-- ========================================== --
 	{
 		"epwalsh/obsidian.nvim",
 		version = "*", -- recommended, use latest release instead of latest commit
-		lazy = true,
-		ft = "markdown",
+		-- lazy = true,
+		-- ft = "markdown",
 		dependencies = {
 			-- Required.
 			"nvim-lua/plenary.nvim",
@@ -214,13 +214,13 @@ return {
       -- 配置键盘映射
       -- stylua: ignore start
       vim.keymap.set('n','<leader>on',"<cmd>ObsidianNew<CR>", {desc = "Obsidian: Create New Note"})
-      vim.keymap.set('n','<leader>of',"<cmd>ObsidianQuickSwitch", {desc = "Obsidian: Search In All vaults By name"})
-      vim.keymap.set('n','<leader>og',"<cmd>ObsidianSearch", {desc = "Obsidian: Search In All vaults By grep"})
-      vim.keymap.set('n','<leader>or',"<cmd>ObsidianBacklinks", {desc = "Obsidian: Back links"})
-      vim.keymap.set('n','<leader>ot',"<cmd>ObsidianTags", {desc = "Obsidian: Search by Tags"})
-      vim.keymap.set('n','<leader>op',"<cmd>ObsidianTemplate", {desc = "Obsidian: Paste Template"})
-      vim.keymap.set('n','<leader>ol',"<cmd>ObsidianLinks", {desc = "Obsidian: All Links In Buffer"})
-      vim.keymap.set('n','<leader>oe',"<cmd>ObsidianExtractNote", {desc = "Obsidian: Move the Visualed To new notes and Link it"})
+      vim.keymap.set('n','<leader>of',"<cmd>ObsidianQuickSwitch<CR>", {desc = "Obsidian: Search In All vaults By name"})
+      vim.keymap.set('n','<leader>og',"<cmd>ObsidianSearch<CR>", {desc = "Obsidian: Search In All vaults By grep"})
+      vim.keymap.set('n','<leader>or',"<cmd>ObsidianBacklinks<CR>", {desc = "Obsidian: Back links"})
+      vim.keymap.set('n','<leader>ot',"<cmd>ObsidianTags<CR>", {desc = "Obsidian: Search by Tags"})
+      vim.keymap.set('n','<leader>op',"<cmd>ObsidianTemplate<CR>", {desc = "Obsidian: Paste Template"})
+      vim.keymap.set('n','<leader>ol',"<cmd>ObsidianLinks<CR>", {desc = "Obsidian: All Links In Buffer"})
+      vim.keymap.set('n','<leader>oe',"<cmd>ObsidianExtractNote<CR>", {desc = "Obsidian: Move the Visualed To new notes and Link it"})
 			-- stylua: ignore end
 		end,
 	},
