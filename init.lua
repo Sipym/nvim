@@ -1,4 +1,21 @@
 vim.g.mapleader = ";"
+
+-- 定义一个全局变量，用于“在需要提供绝对路径时使用”
+local uname = vim.loop.os_uname()
+if uname and uname.sysname then
+	if uname.sysname == "Darwin" then
+		-- macOS
+		vim.g.homedir = "/Users/awjl"
+	elseif uname.sysname == "Linux" then
+		-- Linux
+		vim.g.homedir = "/home/awjl"
+	else
+		-- Unsupported OS
+		print("Unsupported OS: " .. uname.sysname)
+	end
+else
+	print("Failed to determine OS.")
+end
 require("config.lazy")
 require("config.options")
 require("config.keymaps")

@@ -9,6 +9,7 @@ return {
 			vim.g.mkdp_filetypes = { "markdown" }
 			vim.g.mkdp_auto_start = 0
 			vim.g.mkdp_auto_close = 0
+			vim.g.mkdp_images_path = vim.g.homedir .. "/Documents/notes/70-Assets/imgs"
 		end,
 		ft = { "markdown" },
 		-- 绑定快捷键映射
@@ -51,7 +52,6 @@ return {
 			-- Required.
 			"nvim-lua/plenary.nvim",
 			"hrsh7th/nvim-cmp",
-
 			-- see below for full list of optional dependencies 👇
 		},
 		opts = {
@@ -192,10 +192,15 @@ return {
 
 			attachments = {
 				img_folder = "70-Assets/imgs",
+				img_text_func = function(client, path)
+					-- 'path' 参数一开始是包含图片文件绝对路径的 obsidian.Path 对象。
+					-- 'path.name' 属性只包含文件名部分（例如 "1678886400-image.png"）。
+					-- 我们将使用 path.name 同时作为 alt 文本和链接 URL。
+					return string.format("![%s](%s)", path.name, path.name) -- 两次都使用 path.name
+				end,
 			},
-      -- 可以添加在官方提供的回调函数中，添加任意行为,如进入notes时，触发某种行为
-      callbacks = {
-      },
+			-- 可以添加在官方提供的回调函数中，添加任意行为,如进入notes时，触发某种行为
+			callbacks = {},
 		},
 		config = function(_, opts)
 			require("obsidian").setup(opts)
