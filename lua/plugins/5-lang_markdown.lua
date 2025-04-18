@@ -170,7 +170,7 @@ return {
 					-- 检查是否成功获取且包含 birthtime 信息
 					if ok and stat and stat.birthtime and stat.birthtime.sec then
 						-- 直接格式化并返回
-						return os.date("!%Y-%m-%dT%H:%M:%S", stat.birthtime.sec)
+						return os.date("%Y-%m-%dT%H:%M:%S", stat.birthtime.sec)
 					end
 
 					-- 其他情况（错误、不支持等）返回 nil
@@ -178,7 +178,7 @@ return {
 				end
 				-- 获取当前时间 (ISO 8601 UTC 格式)
 				local created_time = GetCreationTimeString()
-				local current_time = os.date("!%Y-%m-%dT%H:%M:%S")
+				local current_time = os.date("%Y-%m-%dT%H:%M:%S")
 
 				-- 构建包含基础元数据和创建时间的 Lua 表
 				local out = {
