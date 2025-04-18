@@ -6,4 +6,3 @@
 !*.lua
 !Lsp_config/*
 !initvim
-!lazy-lock.json
