@@ -1,68 +1,81 @@
 return {
-  {
-    {
-      "olimorris/codecompanion.nvim",
-      dependencies = {
-        "nvim-lua/plenary.nvim",
-        "nvim-treesitter/nvim-treesitter",
-      },
-      config = function()
-        -- Key Map
-        vim.keymap.set({ 'n', 'v' }, '<leader>cp', ':CodeCompanionActions<cr>', { desc = "Open CodeCompanionActions" });
-        vim.keymap.set('n', '<leader>cc', ':CodeCompanionChat Toggle<cr>', { desc = "Toggle CodeCompanionChat" });
-        vim.keymap.set('v', '<leader>cv', ':CodeCompanionChat Add<cr>',
-          { desc = "Add visually selected chat to current chat buffer" });
+	{
+		{
+			"olimorris/codecompanion.nvim",
+			dependencies = {
+				"nvim-lua/plenary.nvim",
+				"nvim-treesitter/nvim-treesitter",
+			},
+			config = function()
+				-- Key Map
+				vim.keymap.set(
+					{ "n", "v" },
+					"<leader>cp",
+					":CodeCompanionActions<cr>",
+					{ desc = "Open CodeCompanionActions" }
+				)
+				vim.keymap.set(
+					"n",
+					"<leader>cc",
+					":CodeCompanionChat Toggle<cr>",
+					{ desc = "Toggle CodeCompanionChat" }
+				)
+				vim.keymap.set(
+					"v",
+					"<leader>cv",
+					":CodeCompanionChat Add<cr>",
+					{ desc = "Add visually selected chat to current chat buffer" }
+				)
 
-        -- Configure
-        require("codecompanion").setup({
-          -- Choose Gemini
-          adapters = {
-            gemini = function()
-              return require("codecompanion.adapters").extend("gemini", {
-                env = {
-                  api_key = "AIzaSyBbdBIxH6KYpBYLKoaHMwjLxI43j1uVGyU",
-                },
-                schema = {
-                  model = {
-                    default = "gemini-2.0-flash",
-                  },
-                },
-              })
-            end,
-          },
-          strategies = {
-            chat = {
-              adapter = "gemini",
-              variables = {
-                ["workspace"] = {
-                  ---Ensure the file matches the CodeCompanion.Variable class
-                  ---@return string|fun(): nil
-                  callback =
-                  "~/.local/share/nvim/lazy/codecompanion.nvim/lua/codecompanion/strategies/chat/variables/workspace.lua",
-                  description = "Explain what my_var does",
-                  opts = {
-                    contains_code = true,
-                  },
-                },
-              }
-            },
-            inline = {
-              adapter = "gemini",
-            },
-          },
+				-- Configure
+				require("codecompanion").setup({
+					-- Choose Gemini
+					adapters = {
+						gemini = function()
+							return require("codecompanion.adapters").extend("gemini", {
+								env = {
+									api_key = "AIzaSyBbdBIxH6KYpBYLKoaHMwjLxI43j1uVGyU",
+								},
+								schema = {
+									model = {
+										default = "gemini-2.0-flash",
+									},
+								},
+							})
+						end,
+					},
+					strategies = {
+						chat = {
+							adapter = "gemini",
+							variables = {
+								["workspace"] = {
+									---Ensure the file matches the CodeCompanion.Variable class
+									---@return string|fun(): nil
+									callback = "~/.local/share/nvim/lazy/codecompanion.nvim/lua/codecompanion/strategies/chat/variables/workspace.lua",
+									description = "Explain what my_var does",
+									opts = {
+										contains_code = true,
+									},
+								},
+							},
+						},
+						inline = {
+							adapter = "gemini",
+						},
+					},
 
-          -- Add Own Prompt
-          prompt_library = {
-            ["English Expert"] = {
-              strategy = "chat",
-              description = "Corrects English and answers questions.",
-              opts = {
-                mapping = "<LocalLeader>ce"
-              },
-              prompts = {
-                {
-                  role = "system",
-                  content = [[
+					-- Add Own Prompt
+					prompt_library = {
+						["English Expert"] = {
+							strategy = "chat",
+							description = "Corrects English and answers questions.",
+							opts = {
+								mapping = "<LocalLeader>ce",
+							},
+							prompts = {
+								{
+									role = "system",
+									content = [[
 You are a helpful and meticulous language assistant designed to provide both language correction and question answering. Your primary goal is to understand and answer user questions effectively. However, because the user's queries are in English, you will first ensure the English is grammatically sound before answering the question.
 
 **Here's your process:**
@@ -136,18 +149,16 @@ You are a helpful and meticulous language assistant designed to provide both lan
 
 This should make the grammatical analysis much easier to scan and understand.  As always, test it thoroughly with different types of sentences and get feedback from your users!  Good luck!
                   ]],
-                },
-                {
-                  role = "user",
-                  content = "<user_prompt>Please  answer my question.</user_prompt>",
-                },
-              },
-            },
-          },
-
-
-        })
-      end,
-    },
-  }
+								},
+								{
+									role = "user",
+									content = "<user_prompt>Please  answer my question.</user_prompt>",
+								},
+							},
+						},
+					},
+				})
+			end,
+		},
+	},
 }
