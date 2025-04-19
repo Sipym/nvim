@@ -130,14 +130,9 @@ return {
 			-- =============================================== --
 			-- 核心跳转功能：按 's'，然后输入目标字符，然后按显示的标签跳转
 			-- 适用于 Normal, Visual, Operator-pending 模式
-			vim.keymap.set({ "n", "x", "o" }, "s", function()
+			vim.keymap.set({ "n", "x", "o" }, "S", function()
 				require("flash").jump()
 			end, { desc = "Flash Jump" })
-
-			-- 'S' 用于反向跳转 (类似内置的 f/F, t/T)
-			vim.keymap.set({ "n", "x", "o" }, "S", function()
-				require("flash").jump({ search = { forward = false } }) -- 设置为反向搜索
-			end, { desc = "Flash Jump Backward" })
 
 			-- (推荐) 使用 Flash 来增强 Treesitter 跳转 (需要 nvim-treesitter)
       -- 用于快速选择需要的块visual block
