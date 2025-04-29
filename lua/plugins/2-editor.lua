@@ -135,7 +135,7 @@ return {
 			end, { desc = "Flash Jump" })
 
 			-- (推荐) 使用 Flash 来增强 Treesitter 跳转 (需要 nvim-treesitter)
-      -- 用于快速选择需要的块visual block
+			-- 用于快速选择需要的块visual block
 			vim.keymap.set("o", "<leader>vb", function()
 				require("flash").treesitter()
 			end, { desc = "Flash Treesitter" })
@@ -155,6 +155,22 @@ return {
 			vim.keymap.set({ "n", "x", "o" }, "F", function()
 				require("flash").jump({ pattern = vim.fn.getreg("/"), search = { forward = false } })
 			end, { desc = "Flash to Search Pattern (Backward)" })
+		end,
+	},
+
+  -- 更现代化的折叠
+	{
+		"kevinhwang91/nvim-ufo",
+		dependencies = { "kevinhwang91/promise-async" },
+		config = function()
+			vim.o.foldcolumn = "1" -- '0' is not bad
+			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+			vim.o.foldlevelstart = 99
+			vim.o.foldenable = true
+			-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+			vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+			vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+
 		end,
 	},
 }

@@ -35,11 +35,6 @@ vim.opt.incsearch      = true          -- 匹配模式中，随着字符的输�
 vim.opt.hidden         = true          -- 当关闭缓冲区的时候，不会删除它,而是隐藏他
 vim.opt.signcolumn     = 'yes'         -- 在左边预留一个空间，避免布局出现偏移
 vim.opt.conceallevel   = 1
-vim.opt.foldenable     = true
-vim.opt.foldmethod     = "indent"
-vim.opt.foldcolumn     = "0"
-vim.opt.foldlevel      = 9
-
 
 -- File types
 vim.filetype.add({

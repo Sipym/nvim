@@ -127,6 +127,15 @@ return {
 			--    这里我们获取 nvim-cmp 提供的默认能力，确保补全功能正常工作
 			local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+      -- 2.1 添加LSP客户端的能力
+      --     为nvim lsp集成nvim-ufo的折叠功能
+			capabilities.textDocument.foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			}
+			require("ufo").setup()
+
+
 			-- 3. 定义 on_attach 函数
 			--    这个函数会在 LSP 客户端成功附加 (attach) 到一个缓冲区 (buffer) 时执行
 			--    这是设置缓冲区局部 (buffer-local) 快捷键和选项的最佳位置
