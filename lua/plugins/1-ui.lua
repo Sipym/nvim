@@ -345,4 +345,40 @@ return {
 			end, { silent = true, expr = true })
 		end,
 	},
+
+	-- TODO comment
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			-- NOTE: 这里需要调用require，保证该插件在加载文件前加载
+			require("todo-comments").setup()
+			vim.keymap.set("n", "]t", function()
+				require("todo-comments").jump_next()
+			end, { desc = "Next todo comment" })
+
+			vim.keymap.set("n", "[t", function()
+				require("todo-comments").jump_prev()
+			end, { desc = "Previous todo comment" })
+		end,
+	},
+
+	-- 更好看的诊断信息
+  {
+		"rachartier/tiny-inline-diagnostic.nvim",
+		event = "VeryLazy", -- Or `LspAttach`
+		priority = 1000, -- needs to be loaded in first
+		config = function()
+			require("tiny-inline-diagnostic").setup({
+        options = {
+          -- 能够同时看到多个诊断
+          multilines = {
+            enabled = true,
+          },
+        }
+
+      })
+			vim.diagnostic.config({ virtual_text = false }) -- Only if needed in your configuration, if you already have native LSP diagnostics
+		end,
+	},
 }
