@@ -32,6 +32,9 @@ return {
 		---@type render.md.UserConfig
 		ft = { "markdown", "codecompanion" },
 		opts = {
+      heading = {
+        icons = {'󰲠 ','󰲢 ','󰲤 ', '󰲦 ' ,'󰲨 ', '󰲪 ',}
+      },
 			completions = { lsp = { enabled = true } },
 		},
 		config = function(_, opts)

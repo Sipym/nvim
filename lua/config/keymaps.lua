@@ -8,7 +8,7 @@ local keymap = vim.keymap -- 方便后续调用
 
 -- 禁用 'J' 键的默认行为 (substitute character)
 keymap.set({ "n", "v" }, "s", "<Nop>", { silent = true, desc = "禁用 s (substitute/change)" })
-keymap.set({ "n" }, "J", "<Nop>", { silent = true, desc = "禁用 J " })
+keymap.set({ "n" , "v" }, "J", "<Nop>", { silent = true, desc = "禁用 J " })
 
 keymap.set("n", "sh", "<Cmd>set nosplitright<CR><Cmd>vsplit<CR>", { silent = true, desc = "向左垂直分屏" })
 keymap.set("n", "sl", "<Cmd>set splitright<CR><Cmd>vsplit<CR>", { silent = true, desc = "向右垂直分屏" })

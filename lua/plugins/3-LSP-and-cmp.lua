@@ -30,6 +30,7 @@ return {
 	-- ========================================== --
 	{
 		"williamboman/mason-lspconfig.nvim",
+    version = "1.32.0",
 		-- 确保在 nvim-lspconfig 和 mason.nvim 之后加载
 		dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
 		opts = {
@@ -297,22 +298,6 @@ return {
 					})
 				end,
 
-				-- ["pylsp"] = function ()
-				--   lspconfig.pylsp.setup({
-				--     on_attach = on_attach,
-				--     capabilities = capabilities,
-				--     settings = {
-				--       pylsp = {
-				--         plugins = {
-				--           -- 配置 pylsp 的插件
-				--           -- pycodestyle = { enabled = true },
-				--           -- pylint = { enabled = true },
-				--           -- flake8 = { enabled = false },
-				--         }
-				--       }
-				--     }
-				--   })
-				-- end,
 
 				-- 为其他需要特殊配置的服务器添加更多条目...
 				-- ["tsserver"] = function() ... end,
