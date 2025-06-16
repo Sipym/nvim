@@ -23,14 +23,6 @@ vim.opt.rtp:prepend(lazypath) -- 添加runtime path
 require("lazy").setup({
   { import = "plugins" },
   { import = "plugins.language" },
+  { import = "plugins.misc" },
 })
-
-
-
-
-
-
-
-
-
 

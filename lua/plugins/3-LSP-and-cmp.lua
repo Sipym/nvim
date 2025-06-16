@@ -4,7 +4,7 @@ return {
 	-- LSP 服务器、Linter、Formatter 管理 (Mason)
 	-- ========================================== --
 	{
-		"williamboman/mason.nvim",
+		"mason-org/mason.nvim",
 		cmd = "Mason", -- 仅在执行 :Mason 命令时加载
 		opts = {
 			-- 在这里列出所有需要 Mason管理的 LSP 服务器、Linter 和 Formatter
@@ -29,10 +29,9 @@ return {
 	-- Mason 与 nvim-lspconfig 的桥梁
 	-- ========================================== --
 	{
-		"williamboman/mason-lspconfig.nvim",
-    version = "1.32.0",
-		-- 确保在 nvim-lspconfig 和 mason.nvim 之后加载
-		dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+		"mason-org/mason-lspconfig.nvim",
+		-- 依赖关系确保了本插件在 nvim-lspconfig 和 mason.nvim 之后加载
+		dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
 		opts = {
 			-- 在这里列出所有需要 Mason lspconfig管理的 LSP 服务器
 			ensure_installed = {
@@ -47,12 +46,7 @@ return {
 				"markdown_oxide", -- Markdown (推荐)
 				"verible",
 			},
-			-- 是否自动安装 ensure_installed 中的服务器
-			automatic_installation = true,
 		},
-		-- config 函数将在 mason-lspconfig 加载后执行
-		-- 注意：这个插件的核心功能是在后台自动为 ensure_installed 中的服务器调用 lspconfig.setup
-		-- 我们将在 nvim-lspconfig 的 config 中定义如何进行 setup( 即具体setup的参数是什么）
 	},
 
 	-- ========================================== --
@@ -62,10 +56,8 @@ return {
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" }, -- 在打开文件时触发加载
 		dependencies = {
-			"williamboman/mason-lspconfig.nvim",
+			"mason-org/mason-lspconfig.nvim",
 			"hrsh7th/cmp-nvim-lsp", -- nvim-cmp 的 LSP 补全源
-			-- (可选但推荐) UI 增强
-			-- "j-hui/fidget.nvim", -- noice.nvim插件覆盖了这个内容
 			"onsails/lspkind.nvim",
 		},
 		config = function()
@@ -115,9 +107,6 @@ return {
 				},
 			})
 
-			-- (可选) 配置 fidget.nvim (右上角 LSP 状态指示器)
-			-- require("fidget").setup({})
-
 			-- =========================================================== --
 			-- == 核心 LSP 设置 (on_attach 和 capabilities) ==
 			--    这些将作为通用配置传递给每个 LSP 服务器的 setup
@@ -128,14 +117,13 @@ return {
 			--    这里我们获取 nvim-cmp 提供的默认能力，确保补全功能正常工作
 			local capabilities = cmp_nvim_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-      -- 2.1 添加LSP客户端的能力
-      --     为nvim lsp集成nvim-ufo的折叠功能
+			-- 2.1 添加LSP客户端的能力
+			--     为nvim lsp集成nvim-ufo的折叠功能
 			capabilities.textDocument.foldingRange = {
 				dynamicRegistration = false,
 				lineFoldingOnly = true,
 			}
 			require("ufo").setup()
-
 
 			-- 3. 定义 on_attach 函数
 			--    这个函数会在 LSP 客户端成功附加 (attach) 到一个缓冲区 (buffer) 时执行
@@ -222,87 +210,62 @@ return {
 			end
 
 			-- =========================================================== --
-			-- == 配置 LSP 服务器 (通过 mason-lspconfig 触发) ==
+			-- == 配置 LSP 服务器 (通过 lspconfig) ==
 			-- =========================================================== --
-
-			-- 4. 使用 mason-lspconfig 的 setup_handlers 来配置每个服务器
-			--    这会遍历 ensure_installed 列表中的服务器，并为每个服务器调用 lspconfig.setup
-			require("mason-lspconfig").setup_handlers({
-				-- 默认的处理函数：对所有未特殊指定的服务器生效
-				-- 它接收服务器名称作为参数
-				function(server_name)
-					-- 核心：调用 lspconfig.<server_name>.setup({...})
-					lspconfig[server_name].setup({
-						on_attach = on_attach, -- !! 传递上面定义的 on_attach 回调函数
-						capabilities = capabilities, -- !! 传递上面定义的 capabilities
-						-- 你可以在这里添加所有服务器都需要的通用设置
-						-- flags = { debounce_text_changes = 150 },
-					})
-				end,
-
-				-- === 特定服务器的特殊配置 ===
-				-- 如果某个服务器需要不同于默认设置的配置，在这里添加一个键值对
-				-- key 是服务器名称 (必须与 Mason 中的名称一致)
-				-- value 是一个函数，该函数将负责调用 lspconfig.<server_name>.setup
-
-				["lua_ls"] = function()
-					lspconfig.lua_ls.setup({
-						on_attach = on_attach, -- 仍然使用通用的 on_attach
-						capabilities = capabilities, -- 仍然使用通用的 capabilities
-						-- lua_ls 的特殊设置
-						settings = {
-							Lua = {
-								runtime = { version = "LuaJIT" },
-								diagnostics = {
-									globals = { "vim" }, -- 让 lua_ls 知道 vim 是全局变量
-								},
-								workspace = {
-									library = vim.api.nvim_get_runtime_file("", true),
-									checkThirdParty = false,
-								},
-								telemetry = { enable = false },
-							},
+			lspconfig.lua_ls.setup ({
+				on_attach = on_attach, -- 仍然使用通用的 on_attach
+				capabilities = capabilities, -- 仍然使用通用的 capabilities
+				settings = {
+					Lua = {
+						runtime = {
+							version = "LuaJIT",
 						},
-					})
-				end,
-
-				["verible"] = function()
-					lspconfig.verible.setup({
-						on_attach = on_attach,
-						capabilities = capabilities,
-						-- verible 的特殊设置 (覆盖 cmd)
-						cmd = {
-							"verible-verilog-ls",
-							"--rules_config",
-							vim.fn.expand("~/.config/nvim/Lsp_config/.rules.verible_lint"),
-							"--flagfile",
-							vim.fn.expand("~/.config/nvim/Lsp_config/verible_format.txt"),
-						},
-						-- 你也可以在这里覆盖 on_attach 或 capabilities (如果需要)
-					})
-				end,
-
-				["pyright"] = function()
-					lspconfig.pyright.setup({
-						on_attach = on_attach,
-						capabilities = capabilities,
-						settings = {
-							python = {
-								-- pythonPath = "/path/to/your/venv/bin/python",
+						diagnostics = {
+							globals = {
+								"vim",
+								"require",
 							},
-							pyright = {
-								-- typeCheckingMode = "basic", -- 或 "strict"
+							workspace = {
+								library = vim.api.nvim_get_runtime_file("", true),
+								checkThirdParty = false,
 							},
+							telemetry = { enable = false },
 						},
-						-- ... 其他 pyright 特定设置
-					})
-				end,
-
-
-				-- 为其他需要特殊配置的服务器添加更多条目...
-				-- ["tsserver"] = function() ... end,
-				-- ["clangd"] = function() ... end,
+					},
+				},
 			})
+
+			lspconfig.verible.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				-- verible 的特殊设置 (覆盖 cmd)
+				cmd = {
+					"verible-verilog-ls",
+					"--rules_config",
+					vim.fn.expand("~/.config/nvim/Lsp_config/.rules.verible_lint"),
+					"--flagfile",
+					vim.fn.expand("~/.config/nvim/Lsp_config/verible_format.txt"),
+				},
+				-- 你也可以在这里覆盖 on_attach 或 capabilities (如果需要)
+			})
+      lspconfig.markdown_oxide.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+      })
+			lspconfig.pyright.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				settings = {
+					python = {
+						-- pythonPath = "/path/to/your/venv/bin/python",
+					},
+					pyright = {
+						-- typeCheckingMode = "basic", -- 或 "strict"
+					},
+				},
+				-- ... 其他 pyright 特定设置
+			})
+
 		end,
 	},
 
@@ -419,7 +382,6 @@ return {
 	-- ========================================== --
 	{
 		"L3MON4D3/LuaSnip",
-		-- version = "v2.*", -- 或者指定一个版本
 		dependencies = { "rafamadriz/friendly-snippets" }, -- 如果你需要通用 snippets
 		build = (vim.fn.has("win32") == 0 and vim.fn.executable("make")) and "make install_jsregexp" or nil,
 		config = function()
