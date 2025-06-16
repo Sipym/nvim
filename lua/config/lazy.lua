@@ -1,5 +1,5 @@
 -- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/home/awjl/.local/share/nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
     local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
@@ -20,8 +20,10 @@ vim.opt.rtp:prepend(lazypath) -- 添加runtime path
 
 
 -- 通过plugins来安装插件,使代码更加的简洁
-require("lazy").setup("plugins")
-
+require("lazy").setup({
+  { import = "plugins" },
+  { import = "plugins.language" },
+})
 
 
 
