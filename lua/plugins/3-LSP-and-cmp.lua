@@ -1,4 +1,16 @@
--- lua/plugins/lsp.lua
+-- ensured_installed server list
+local lsp_servers = {
+  "lua_ls",
+  "pyright",
+  "bashls",
+  "clangd",
+  "html",
+  "cssls",
+  "jsonls",
+  "markdown_oxide",
+  "verible",
+}
+
 return {
   -- ========================================== --
   -- LSP 服务器、Linter、Formatter 管理 (Mason)
@@ -34,18 +46,7 @@ return {
     dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
     opts = {
       -- 在这里列出所有需要 Mason lspconfig管理的 LSP 服务器
-      ensure_installed = {
-        -- LSP服务器
-        "lua_ls",
-        "pyright", -- 推荐 Python 使用 pyright
-        "bashls",
-        "clangd",
-        "html",
-        "cssls",
-        "jsonls",
-        "markdown_oxide", -- Markdown (推荐)
-        "verible",
-      },
+      ensure_installed = lsp_servers,
     },
   },
 
@@ -61,7 +62,6 @@ return {
       "onsails/lspkind.nvim",
     },
     config = function()
-      local lspconfig = require("lspconfig")
       local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
       -- =========================================================== --
@@ -189,14 +189,13 @@ return {
         map("n", "<leader>vws", function()
           require("telescope.builtin").lsp_dynamic_workspace_symbols()
         end, "Workspace Symbols (Telescope)") -- 使用 Telescope 查找工作区符号
-
       end
 
       -- =========================================================== --
       -- == 配置 LSP 服务器 (通过 lspconfig) ==
       -- =========================================================== --
 
-      lspconfig.lua_ls.setup({
+      vim.lsp.config('lua_ls',{
         on_attach = on_attach,       -- 仍然使用通用的 on_attach
         capabilities = capabilities, -- 仍然使用通用的 capabilities
         settings = {
@@ -218,10 +217,15 @@ return {
           },
         },
       })
+      -- 为每个服务器应用通用配置
+      for _, server_name in ipairs(lsp_servers) do
+        vim.lsp.config(server_name,{
+          on_attach = on_attach,
+          capabilities = capabilities,
+        })
+      end
 
-      lspconfig.verible.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
+      vim.lsp.config('verible',{
         -- verible 的特殊设置 (覆盖 cmd)
         cmd = {
           "verible-verilog-ls",
@@ -232,9 +236,8 @@ return {
         },
         -- 你也可以在这里覆盖 on_attach 或 capabilities (如果需要)
       })
-      lspconfig.markdown_oxide.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
+
+      vim.lsp.config('markdown_oxide',{
         settings = {
           -- 假设 markdown-oxide 有一个这样的配置选项
           markdown = {
@@ -248,9 +251,8 @@ return {
           -- },
         },
       })
-      lspconfig.pyright.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
+
+      vim.lsp.config('pyright',{
         settings = {
           python = {
             -- pythonPath = "/path/to/your/venv/bin/python",
@@ -259,7 +261,16 @@ return {
             -- typeCheckingMode = "basic", -- 或 "strict"
           },
         },
-        -- ... 其他 pyright 特定设置
+      })
+
+      vim.lsp.config('clangd',{
+        cmd = {
+          "clangd",
+          "--clang-tidy",       -- 启用静态检查
+          "--header-insertion=never", -- 禁止补全时自动插入头文件
+        },
+        settings = {
+        },
       })
     end,
   },
