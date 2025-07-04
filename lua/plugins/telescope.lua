@@ -20,11 +20,26 @@ return {
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }
     },
     config = function()
-      require("telescope").setup()
-			vim.keymap.set("n", "<leader>fn", function() -- un: user notify
-				require("telescope").extensions.notify.notify()
-			end, { desc = "查看通知历史" })
+      require("telescope").setup({
+        defaults = {
+
+          layout_strategy = 'vertical',
+          layout_config = {
+            width = 0.6,
+          },
+          mappings = {
+            i = {
+              -- map actions.which_key to <C-h> (default: <C-/>)
+              -- actions.which_key shows the mappings for your picker,
+              -- e.g. git_{create, delete, ...}_branch for the git_branches picker
+              ["<C-h>"] = "which_key"
+            }
+          }
+        },
+      })
+      vim.keymap.set("n", "<leader>fn", function() -- un: user notify
+        require("telescope").extensions.notify.notify()
+      end, { desc = "查看通知历史" })
     end,
   },
-  -- 为telescope服务
 }

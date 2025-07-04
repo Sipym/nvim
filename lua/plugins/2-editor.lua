@@ -1,70 +1,70 @@
 -- 增强编辑体验
 return {
-	-- comment
-	{
-		"numToStr/Comment.nvim",
-		opts = {
-			---Add a space b/w comment and the line
-			padding = true,
-			---Whether the cursor should stay at its position
-			sticky = true,
-			---Lines to be ignored while (un)comment
-			ignore = nil,
-			---LHS of toggle mappings in NORMAL mode
-			toggler = {
-				---Line-comment toggle keymap
-				line = "gcc",
-				---Block-comment toggle keymap
-				block = "gbc",
-			},
-			---LHS of operator-pending mappings in NORMAL and VISUAL mode
-			opleader = {
-				---Line-comment keymap
-				line = "gc",
-				---Block-comment keymap
-				block = "gb",
-			},
-			---LHS of extra mappings
-			extra = {
-				---Add comment on the line above
-				above = "gcO",
-				---Add comment on the line below
-				below = "gco",
-				---Add comment at the end of line
-				eol = "gcA",
-			},
-			---Enable keybindings
-			---NOTE: If given `false` then the plugin won't create any mappings
-			mappings = {
-				---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
-				basic = true,
-				---Extra mapping; `gco`, `gcO`, `gcA`
-				extra = false,
-			},
-			---Function to call before (un)comment
-			pre_hook = nil,
-			---Function to call after (un)comment
-			post_hook = nil,
-		}, -- add any options here
-	},
+  -- comment
+  {
+    "numToStr/Comment.nvim",
+    opts = {
+      ---Add a space b/w comment and the line
+      padding = true,
+      ---Whether the cursor should stay at its position
+      sticky = true,
+      ---Lines to be ignored while (un)comment
+      ignore = nil,
+      ---LHS of toggle mappings in NORMAL mode
+      toggler = {
+        ---Line-comment toggle keymap
+        line = "gcc",
+        ---Block-comment toggle keymap
+        block = "gbc",
+      },
+      ---LHS of operator-pending mappings in NORMAL and VISUAL mode
+      opleader = {
+        ---Line-comment keymap
+        line = "gc",
+        ---Block-comment keymap
+        block = "gb",
+      },
+      ---LHS of extra mappings
+      extra = {
+        ---Add comment on the line above
+        above = "gcO",
+        ---Add comment on the line below
+        below = "gco",
+        ---Add comment at the end of line
+        eol = "gcA",
+      },
+      ---Enable keybindings
+      ---NOTE: If given `false` then the plugin won't create any mappings
+      mappings = {
+        ---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
+        basic = true,
+        ---Extra mapping; `gco`, `gcO`, `gcA`
+        extra = false,
+      },
+      ---Function to call before (un)comment
+      pre_hook = nil,
+      ---Function to call after (un)comment
+      post_hook = nil,
+    }, -- add any options here
+  },
 
-	-- nvim-surround
-	{
-		"kylechui/nvim-surround",
-		version = "*", -- Use for stability; omit to use `main` branch for the latest features
-		event = "VeryLazy",
-		config = function()
-			require("nvim-surround").setup({
-				-- Configuration here, or leave empty to use defaults
-			})
-		end,
-	},
+  -- nvim-surround
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end,
+  },
 
-	-- undotree
-	{
-		"mbbill/undotree",
-		config = function()
-			vim.cmd([[
+  -- undotree
+  {
+    "mbbill/undotree",
+    config = function()
+      vim.cmd([[
         nnoremap <F5> :UndotreeToggle<CR>
         "将撤销文件存储在一个单独的位置
         if has("persistent_undo")
@@ -80,100 +80,52 @@ return {
             set undofile
         endif
         ]])
-		end,
-	},
+    end,
+  },
 
-	-- zen mode
-	{
-		"folke/zen-mode.nvim",
-		opts = {
-			-- your configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
-		},
-		config = function()
-			vim.keymap.set("n", "<leader>z", ":ZenMode<CR>", { desc = "ZenMode" })
-		end,
-	},
+  -- zen mode
+  {
+    "folke/zen-mode.nvim",
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+    config = function()
+      vim.keymap.set("n", "<leader>z", ":ZenMode<CR>", { desc = "ZenMode" })
+    end,
+  },
 
-	-- flash 快速导航
-	{
-		"folke/flash.nvim",
-		-- lazy = false, -- Flash 通常希望在需要时立即响应，可以不设置 lazy 或设为 false
-		-- 或者使用事件触发，但按键触发通常足够
-		event = "VeryLazy", -- 或者在按键映射中直接 require
-		---@type Flash.Config
-		opts = {
-			-- 这里可以放置 Flash 的配置选项来自定义行为
-			-- 例如：修改标签的外观
-			-- label = {
-			--   uppercase = false, -- 使用小写字母作为标签
-			--   -- distance = true, -- 根据距离调整标签颜色 (可能需要调整高亮组)
-			-- },
-			-- 例如：修改模式
-			-- modes = {
-			--   -- 禁用某些模式或修改它们的选项
-			--   char = {
-			--     enabled = true,
-			--     multi_line = true,
-			--     keys = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", -- 用于标签的字符
-			--   }
-			-- },
-		},
-		-- (可选) 如果你想覆盖 Flash 提供的默认键位或确保它在 setup 后执行
-		config = function(_, opts)
-			-- 调用 setup (通常不是严格必需，除非你想在 setup 时传入特殊参数)
-			-- require("flash").setup(opts)
+  -- flash 快速导航
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy", -- 或者在按键映射中直接 require
+    opts = {
+    },
+    keys = {
+      { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+      { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+      { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+    },
+  },
 
-			-- =============================================== --
-			-- == 推荐的 Flash 快捷键映射 ==
-			-- =============================================== --
-			-- 核心跳转功能：按 's'，然后输入目标字符，然后按显示的标签跳转
-			-- 适用于 Normal, Visual, Operator-pending 模式
-			vim.keymap.set({ "n", "x", "o" }, "S", function()
-				require("flash").jump()
-			end, { desc = "Flash Jump" })
+  -- 更现代化的折叠
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = { "kevinhwang91/promise-async" },
+    config = function()
+      vim.o.foldcolumn = "1" -- '0' is not bad
+      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
+      -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+      vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+      vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+      -- Using the native map "za" to toggle fold
+    end,
+  },
 
-			-- (推荐) 使用 Flash 来增强 Treesitter 跳转 (需要 nvim-treesitter)
-			-- 用于快速选择需要的块visual block
-			vim.keymap.set("o", "<leader>vb", function()
-				require("flash").treesitter()
-			end, { desc = "Flash Treesitter" })
-			vim.keymap.set("x", "<leader>vb", function()
-				require("flash").treesitter({ node_type = true })
-			end, { desc = "Flash Treesitter (Node Type)" }) -- Visual模式下可看到节点类型
-			vim.keymap.set("n", "<leader>vb", function()
-				require("flash").treesitter({ node_type = true })
-			end, { desc = "Flash Treesitter (Node Type)" }) -- Normal模式下触发
-
-			-- (可选) 使用 Flash 来跳转到搜索结果
-			-- 按 'f' 跳转到下一个搜索匹配项 (使用 flash 标签)
-			vim.keymap.set({ "n", "x", "o" }, "f", function()
-				require("flash").jump({ pattern = vim.fn.getreg("/") })
-			end, { desc = "Flash to Search Pattern (Forward)" })
-			-- 按 'F' 跳转到上一个搜索匹配项 (使用 flash 标签)
-			vim.keymap.set({ "n", "x", "o" }, "F", function()
-				require("flash").jump({ pattern = vim.fn.getreg("/"), search = { forward = false } })
-			end, { desc = "Flash to Search Pattern (Backward)" })
-		end,
-	},
-
-	-- 更现代化的折叠
-	{
-		"kevinhwang91/nvim-ufo",
-		dependencies = { "kevinhwang91/promise-async" },
-		config = function()
-			vim.o.foldcolumn = "1" -- '0' is not bad
-			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-			vim.o.foldlevelstart = 99
-			vim.o.foldenable = true
-			-- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-			vim.keymap.set("n", "zR", require("ufo").openAllFolds)
-			vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
-		end,
-	},
-
-	-- neotree
+  -- neotree
   {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v3.x",
@@ -205,13 +157,13 @@ return {
     config = function()
       require("neo-tree").setup({
         close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
-        popup_border_style = "NC", -- or "" to use 'winborder' on Neovim v0.11+
+        popup_border_style = "NC",   -- or "" to use 'winborder' on Neovim v0.11+
         enable_git_status = true,
         enable_diagnostics = true,
         open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
         open_files_using_relative_paths = false,
-        sort_case_insensitive = false, -- used when sorting files and directories in the tree
-        sort_function = nil, -- use a custom function for sorting files and directories in the tree
+        sort_case_insensitive = false,                                     -- used when sorting files and directories in the tree
+        sort_function = nil,                                               -- use a custom function for sorting files and directories in the tree
         default_component_configs = {
           container = {
             enable_character_fade = true,
@@ -277,22 +229,22 @@ return {
           -- If you don't want to use these columns, you can set `enabled = false` for each of them individually
           file_size = {
             enabled = true,
-            width = 12, -- width of the column
+            width = 12,          -- width of the column
             required_width = 64, -- min width of window required to show this column
           },
           type = {
             enabled = true,
-            width = 10, -- width of the column
+            width = 10,           -- width of the column
             required_width = 122, -- min width of window required to show this column
           },
           last_modified = {
             enabled = true,
-            width = 20, -- width of the column
+            width = 20,          -- width of the column
             required_width = 88, -- min width of window required to show this column
           },
           created = {
             enabled = true,
-            width = 20, -- width of the column
+            width = 20,           -- width of the column
             required_width = 110, -- min width of window required to show this column
           },
           symlink_target = {
@@ -405,11 +357,11 @@ return {
             },
           },
           follow_current_file = {
-            enabled = false, -- This will find and focus the file in the active buffer every time
+            enabled = false,                      -- This will find and focus the file in the active buffer every time
             --               -- the current file is changed while the tree is open.
-            leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+            leave_dirs_open = false,              -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
           },
-          group_empty_dirs = false, -- when true, empty folders will be grouped together
+          group_empty_dirs = false,               -- when true, empty folders will be grouped together
           hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
           -- in whatever position is specified in window.position
           -- "open_current",  -- netrw disabled, opening a directory opens within the
@@ -458,11 +410,11 @@ return {
         },
         buffers = {
           follow_current_file = {
-            enabled = true, -- This will find and focus the file in the active buffer every time
+            enabled = true,          -- This will find and focus the file in the active buffer every time
             --              -- the current file is changed while the tree is open.
             leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
           },
-          group_empty_dirs = true, -- when true, empty folders will be grouped together
+          group_empty_dirs = true,   -- when true, empty folders will be grouped together
           show_unloaded = true,
           window = {
             mappings = {
