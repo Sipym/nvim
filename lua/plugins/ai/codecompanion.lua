@@ -157,29 +157,6 @@ This should make the grammatical analysis much easier to scan and understand.  A
 							},
 						},
 					},
-
-          -- Add vectorcode 
-					-- extensions = {
-					-- 	vectorcode = {
-					-- 		---@type VectorCode.CodeCompanion.ExtensionOpts
-					-- 		opts = {
-					-- 			tool_group = {
-					-- 				enabled = true,
-					-- 				collapse = true,
-					-- 				-- tools in this array will be included to the `vectorcode_toolbox` tool group
-					-- 				extras = {},
-					-- 			},
-					-- 			tool_opts = {
-					-- 				---@type VectorCode.CodeCompanion.LsToolOpts
-					-- 				ls = {},
-					-- 				---@type VectorCode.CodeCompanion.QueryToolOpts
-					-- 				query = {},
-					-- 				---@type VectorCode.CodeCompanion.VectoriseToolOpts
-					-- 				vectorise = {},
-					-- 			},
-					-- 		},
-					-- 	},
-					-- },
 				})
 			end,
 		},

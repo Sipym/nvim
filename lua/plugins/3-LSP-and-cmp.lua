@@ -9,6 +9,7 @@ local lsp_servers = {
   "jsonls",
   "markdown_oxide",
   "verible",
+  "nil_ls",
 }
 
 return {
@@ -171,7 +172,6 @@ return {
         end, "Goto Definition (Telescope, New Tab)") -- 使用 Telescope 实现跳转到新 Tab
 
         -- 信息与操作
-        map("n", "K", vim.lsp.buf.hover, "Hover Documentation")         -- 显示悬停文档/信息
         map("i", "<C-h>", vim.lsp.buf.signature_help, "Signature Help") -- (插入模式) 显示函数签名帮助
         map("n", "<leader>ca", vim.lsp.buf.code_action, "Code Action")  -- 执行代码操作 (修复、重构等)
         map("n", "<leader>rn", vim.lsp.buf.rename, "Rename Symbol")     -- 重命名符号
