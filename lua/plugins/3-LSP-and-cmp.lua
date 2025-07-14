@@ -9,7 +9,7 @@ local lsp_servers = {
   "jsonls",
   "markdown_oxide",
   "verible",
-  "nil_ls",
+  "rnix",
 }
 
 return {

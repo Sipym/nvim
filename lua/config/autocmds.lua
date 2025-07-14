@@ -1,3 +1,8 @@
+vim.cmd([[
+  augroup AutoSetMarkdownIndent
+    autocmd BufEnter *.md :set shiftwidth=2
+  augroup END
+]])
 -- Turn off paste mode when leaving insert
 -- vim.api.nvim_create_autocmd("InsertLeave", {
 --   pattern = "*",
