@@ -1,3 +1,4 @@
+-- 可以用于搜寻任何东西。
 return {
   {
     'nvim-telescope/telescope.nvim',
@@ -8,9 +9,22 @@ return {
       { '<leader>fb', function() require('telescope.builtin').buffers() end,    desc = 'Buffers' },
       { '<leader>fh', function() require('telescope.builtin').help_tags() end,  desc = 'Help tags' },
       {
-        "<leader>fp",
+        '<leader>fp',
+        function()
+          require 'telescope'.extensions.project.project {
+            on_project_selected = function(prompt_bufnr)
+              local project_actions = require("telescope._extensions.project.actions")
+              -- Do anything you want in here. For example:
+              project_actions.change_working_directory(prompt_bufnr, false)
+            end,
+          }
+        end,
+        desc = 'Find in project'
+      },
+      {
+        "<leader>fv",
         function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
-        desc = "Find Plugin File",
+        desc = "Find Neovim Plugin File",
       },
     },
     dependencies = {
@@ -37,6 +51,11 @@ return {
           }
         },
         extensions = {
+          project = {
+            base_dirs = {
+              "~/Project/",
+            }
+          },
           ["ui-select"] = {
             require("telescope.themes").get_dropdown {
               -- even more opts
@@ -55,19 +74,28 @@ return {
             --      do the following
             --   codeactions = false,
             -- }
-          }
+          },
         }
       })
       -- To get ui-select loaded and working with telescope, you need to call
       -- load_extension, somewhere after setup function:
       require("telescope").load_extension("ui-select")
+      require("telescope").load_extension('project')
       vim.keymap.set("n", "<leader>fn", function() -- un: user notify
         require("telescope").extensions.notify.notify()
       end, { desc = "查看通知历史" })
     end,
   },
+
   {
     'nvim-telescope/telescope-ui-select.nvim',
 
+  },
+
+  {
+    'nvim-telescope/telescope-project.nvim',
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+    },
   },
 }

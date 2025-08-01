@@ -195,7 +195,7 @@ return {
       -- == 配置 LSP 服务器 (通过 lspconfig) ==
       -- =========================================================== --
 
-      vim.lsp.config('lua_ls',{
+      vim.lsp.config('lua_ls', {
         on_attach = on_attach,       -- 仍然使用通用的 on_attach
         capabilities = capabilities, -- 仍然使用通用的 capabilities
         settings = {
@@ -219,13 +219,13 @@ return {
       })
       -- 为每个服务器应用通用配置
       for _, server_name in ipairs(lsp_servers) do
-        vim.lsp.config(server_name,{
+        vim.lsp.config(server_name, {
           on_attach = on_attach,
           capabilities = capabilities,
         })
       end
 
-      vim.lsp.config('verible',{
+      vim.lsp.config('verible', {
         -- verible 的特殊设置 (覆盖 cmd)
         cmd = {
           "verible-verilog-ls",
@@ -237,7 +237,7 @@ return {
         -- 你也可以在这里覆盖 on_attach 或 capabilities (如果需要)
       })
 
-      vim.lsp.config('markdown_oxide',{
+      vim.lsp.config('markdown_oxide', {
         settings = {
           -- 假设 markdown-oxide 有一个这样的配置选项
           markdown = {
@@ -252,7 +252,7 @@ return {
         },
       })
 
-      vim.lsp.config('pyright',{
+      vim.lsp.config('pyright', {
         settings = {
           python = {
             -- pythonPath = "/path/to/your/venv/bin/python",
@@ -263,12 +263,16 @@ return {
         },
       })
 
-      vim.lsp.config('clangd',{
+      vim.lsp.config('clangd', {
         cmd = {
           "clangd",
-          "--clang-tidy",       -- 启用静态检查
+          "--clang-tidy",             -- 启用静态检查
           "--header-insertion=never", -- 禁止补全时自动插入头文件
+          '--background-index',
+          '--offset-encoding=utf-8',
         },
+        -- root_markers = { '.git', '.clangd', 'compile_commands.json' },
+        filetypes = { 'c', 'cpp' },
         settings = {
         },
       })
@@ -397,9 +401,7 @@ return {
       -- 这会加载 friendly-snippets 提供的所有 snippets (包括 Markdown)
       -- 这些 snippets 通常使用 VS Code snippet 的格式，所以使用 from_vscode 加载器
       require("luasnip.loaders.from_vscode").lazy_load()
-
-      -- 在这里添加你的 LuaSnip 特定配置，例如加载自定义 snippets
-      -- require("luasnip.loaders.from_lua").load({paths = "~/.config/nvim/snippets"})
+      require("luasnip").filetype_extend("c", { "cdoc" }) -- 关联cdoc片段到c文件
     end,
   },
 
